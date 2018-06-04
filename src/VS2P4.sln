@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		EULA.txt = EULA.txt
 		License.txt = License.txt
 		Package.png = Package.png
+		..\README.md = ..\README.md
 		ReadMe.txt = ReadMe.txt
 		VS2P4\solution explorer.png = VS2P4\solution explorer.png
 	EndProjectSection
