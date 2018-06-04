@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary 
+        format that VisualStudio will consume) has the ability to run a preprocessor 
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so 
+        it is possible to define includes and macros with the same syntax used 
+        in C++ files. Using this ability of the compiler here, we include some files 
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+  <!--Definition of some VSCT specific constants. In this sample we use it for the IDs inside the guidOfficeIcon group. -->
+  <Extern href="msobtnid.h"/>
+
+
+
+
+  <!--The Commands section is where we the commands, menus and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidVS2P4Pkg">
+    <!-- Inside this section we have different sub-sections: one for the menus, another  
+    for the menu groups, one for the buttons (the actual commands), one for the combos 
+    and the last one for the bitmaps used. Each element is identified by a command id that  
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually  
+    called "command set" and is used to group different command inside a logically related  
+    group; your package should define its own command set in order to avoid collisions  
+    with command ids defined by other packages. -->
+
+    <Menus>
+      <!-- Menu for source control commands under File/SourceControl -->
+      <Menu guid="guidVS2P4CmdSet" id="imnuFileSourceControlMenu" priority="0x0000" type="Menu">
+        <Parent guid="guidVS2P4CmdSet" id="igrpFileSourceControl"/>
+        <Strings>
+          <ButtonText>VS2P4</ButtonText>
+          <CommandName>&amp;VS2P4 Source Control</CommandName>
+        </Strings>
+      </Menu>
+      <!--  Menu for commands in toolwindow's toolbar -->
+      <!--<Menu guid="guidVS2P4CmdSet" id="imnuToolWindowToolbarMenu" priority="0x0000" type="ToolWindowToolbar">
+        <Parent guid="guidVS2P4CmdSet" id="imnuToolWindowToolbarMenu"/>
+        <Strings>
+          <ButtonText>WindowBar</ButtonText>
+          <CommandName>Window Bar</CommandName>
+        </Strings>
+      </Menu>-->
+      <!--  Create a top-level toolbar for source control commands -->
+      <Menu guid="guidVS2P4CmdSet" id="itbrSccToolbar" priority="0x0000" type="Toolbar">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSccNowhere"/>
+        <CommandFlag>DefaultDocked</CommandFlag>
+        <Strings>
+          <ButtonText>VS2P4 Source Control</ButtonText>
+          <CommandName>VS2P4 Source Control</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+    
+    <!-- In this section you can define new menu groups. A menu group is a container for 
+         other menus or buttons (commands); from a visual point of view you can see the 
+         group as the part of a menu contained between two lines. The parent of a group 
+         must be a menu. -->
+    <Groups>
+      <!-- 	Group for scci commands in the File main menu -->
+      <Group guid="guidVS2P4CmdSet" id="igrpFileSourceControl" priority="0x0800">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_FILE"/>
+      </Group>
+      <!-- 	Group for scci buttons in the File/SourceControl menu -->
+      <Group guid="guidVS2P4CmdSet" id="igrpSourceControlCommands" priority="0x0000">
+        <Parent guid="guidVS2P4CmdSet" id="imnuFileSourceControlMenu"/>
+      </Group>
+      <!-- 	Group for commands under View main menu -->
+      <!--<Group guid="guidVS2P4CmdSet" id="igrpViewToolWindowGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW"/>
+      </Group>-->
+      <!-- 	Group for buttons in toolwindow's toolbar -->
+      <!--<Group guid="guidVS2P4CmdSet" id="igrpToolWindowToolbarGroup" priority="0x0100">
+        <Parent guid="guidVS2P4CmdSet" id="imnuToolWindowToolbarMenu"/>
+      </Group>-->
+    </Groups>
+    
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button 
+        or combo box in a toolbar. -->
+    <Buttons>
+      <!--To define a menu group you have to specify its ID, the parent menu and its display priority. 
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node or set it to <Icon guid="guidOfficeIcon" id="msotcidNoIcon" /> -->
+
+
+      <!-- 	View/ToolWindow command defined -->
+      <!--<Button guid="guidVS2P4CmdSet" id="icmdViewToolWindow" priority="0x0100" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpViewToolWindowGroup"/>
+        --><!--<CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>--><!--
+        <Strings>
+          <ButtonText>&amp;VS2P4 Source control Toolwindow</ButtonText>
+        </Strings>
+      </Button>-->
+      <!-- 	Buttons in the toolwindow's toolbar -->
+      <!--<Button guid="guidVS2P4CmdSet" id="icmdToolWindowToolbarCommand" priority="0x0100" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpToolWindowToolbarGroup"/>
+        <Icon guid="guidSccProviderImages" id="iconCheckout"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>ToolButton</ButtonText>
+        </Strings>
+      </Button>-->
+      <!-- 	Scc commands in context menus for SolutionExplorer -->
+      <Button guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconCheckout"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Checkout (Edit) File</ButtonText>
+          <MenuText>P4 &amp;Checkout</MenuText>
+          <CommandName>Checkout File (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconMarkForAdd"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Mark File for Add</ButtonText>
+          <MenuText>P4 &amp;Add</MenuText>
+          <CommandName>Add (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconRevertIfUnchanged"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Revert if Unchanged</ButtonText>
+          <MenuText>P4 Revert if &amp;Unchanged</MenuText>
+          <CommandName>Revert if Unchanged (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconRevert"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Revert</ButtonText>
+          <MenuText>P4 &amp;Revert</MenuText>
+          <CommandName>Revert (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconGetLatestRevison"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Get Latest Revison</ButtonText>
+          <MenuText>P4 &amp;Get Latest Revison</MenuText>
+          <CommandName>Get Latest Revison (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconRevisionHistory"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Revision History</ButtonText>
+          <MenuText>P4 Revision &amp;History</MenuText>
+          <CommandName>Revision History (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconDiff"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Diff Against Workspace File</ButtonText>
+          <MenuText>P4 &amp;Diff Against Workspace File</MenuText>
+          <CommandName>Diff Against Workspace File (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconTimeLapse"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Time-lapse Report</ButtonText>
+          <MenuText>P4 &amp;Time-lapse Report</MenuText>
+          <CommandName>Time-lapse Report (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008" type="Button">
+        <Parent guid="guidVS2P4CmdSet" id="igrpSourceControlCommands"/>
+        <Icon guid="guidSccProviderImages" id="iconRefresh"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>P4 Refresh All Glyphs</ButtonText>
+          <MenuText>P4 Re&amp;fresh All Glyphs</MenuText>
+          <CommandName>Refresh All Glyphs (VS2P4)</CommandName>
+        </Strings>
+      </Button>
+
+    </Buttons>
+   
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <Bitmaps>
+      <!--  The bitmap id is defined in a way that is a little bit different from the others: 
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the 
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
+            inside a button definition. An important aspect of this declaration is that the element id 
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+      <Bitmap guid="guidSccProviderImages" href="Resources\Images_32bit.bmp" usedList="iconCheckout, iconMarkForAdd, iconRevertIfUnchanged, iconRevert, iconGetLatestRevison, iconRevisionHistory, iconDiff, iconTimeLapse, iconRefresh"/>
+
+    </Bitmaps>
+ 
+  </Commands>
+
+  <CommandPlacements>
+    <!--Context menu group for SolutionExplorer -->
+    <!--To add commands in context menus, a new group can be defined and placed into existing menus, -->
+    <!--in which case you'll have to add it to context menus for nodes of interest (solution, project, -->
+    <!--folder, item, solution folder, web reference node, properties node, etc),  -->
+    <!--A better approach though is to use one of the existing groups created for source control commands, -->
+    <!--like IDG_VS_CTXT_ITEM_SCC, IDG_VS_CTXT_PROJECT_SCC, IDG_VS_CTXT_SOLUTION_SCC. -->
+
+    <!--Place the source control commands defined in context menu for Solution Explorer also under File/SourceControl menu -->
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC"/>
+    </CommandPlacement>
+
+    <!-- Also place the scc commands in the toolbar -->
+    <CommandPlacement guid="guidVS2P4CmdSet" id="igrpSourceControlCommands" priority="0x0000">
+      <Parent guid="guidVS2P4CmdSet" id="itbrSccToolbar"/>
+    </CommandPlacement>
+  </CommandPlacements>
+
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidVS2P4Pkg" value="{8358dd60-20b0-478a-83b8-ea8ae3ecdaa2}" />
+    
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidVS2P4CmdSet" value="{e64c92e7-8a32-4afd-af57-df9933b4e66d}">
+
+      <IDSymbol name="icmdCheckout" value="0x100"/>
+      <IDSymbol name="icmdMarkForAdd" value="0x101"/>
+      <IDSymbol name="icmdRevertIfUnchanged" value="0x102"/>
+      <IDSymbol name="icmdRevert" value="0x103"/>
+      <IDSymbol name="icmdGetLatestRevison" value="0x104"/>
+      <IDSymbol name="icmdRevisionHistory" value="0x105"/>
+      <IDSymbol name="icmdDiff" value="0x106"/>
+      <IDSymbol name="icmdTimeLapse" value="0x107"/>
+      <IDSymbol name="icmdRefresh" value="0x108"/>
+
+      <!--<IDSymbol name="icmdViewToolWindow" value="0x108"/>
+      <IDSymbol name="icmdToolWindowToolbarCommand" value="0x109"/>-->
+
+      <IDSymbol name="imnuFileSourceControlMenu" value="0x200"/>
+      <IDSymbol name="imnuToolWindowToolbarMenu" value="0x201"/>
+
+      <IDSymbol name="igrpFileSourceControl" value="0x300"/>
+      <IDSymbol name="igrpSourceControlCommands" value="0x301"/>
+      <!--<IDSymbol name="igrpViewToolWindowGroup" value="0x302"/>
+      <IDSymbol name="igrpToolWindowToolbarGroup" value="0x303"/>-->
+      <IDSymbol name="igrpSccNowhere" value="0x304"/>
+      <IDSymbol name="itbrSccToolbar" value="0x400"/>
+    
+    </GuidSymbol>
+
+    <GuidSymbol name="guidSccProviderImages" value="{F24CC5F6-295F-4D3F-87E7-4DDC3A36AF20}" >
+      <IDSymbol name="iconCheckout" value="1"/>
+      <IDSymbol name="iconMarkForAdd" value="2"/>
+      <IDSymbol name="iconRevertIfUnchanged" value="3"/>
+      <IDSymbol name="iconRevert" value="4"/>
+      <IDSymbol name="iconGetLatestRevison" value="5"/>
+      <IDSymbol name="iconRevisionHistory" value="6"/>
+      <IDSymbol name="iconDiff" value="7"/>
+      <IDSymbol name="iconTimeLapse" value="8"/>
+      <IDSymbol name="iconRefresh" value="9"/>
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

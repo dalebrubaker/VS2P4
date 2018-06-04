@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="8358dd60-20b0-478a-83b8-ea8ae3ecdaa2">
+    <Name>VS2P4</Name>
+    <Author>Dale Brubaker</Author>
+    <Version>1.90</Version>
+    <Description xml:space="preserve">Visual Studio To Perforce Source Control</Description>
+    <Locale>1033</Locale>
+    <MoreInfoUrl>http://VS2P4.codeplex.com</MoreInfoUrl>
+    <License>License.txt</License>
+    <GettingStartedGuide>http://VS2P4.codeplex.com/documentation</GettingStartedGuide>
+    <Icon>Package.png</Icon>
+    <PreviewImage>solution explorer.png</PreviewImage>
+    <InstalledByMsi>false</InstalledByMsi>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.6" />
+  </Identifier>
+  <References>
+    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
+      <Name>Visual Studio MPF</Name>
+    </Reference>
+  </References>
+  <Content>
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+  </Content>
+</Vsix>

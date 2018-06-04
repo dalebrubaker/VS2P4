@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://tempuri.org/DefaultUserSettings.xsd"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="DefaultUserSettings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Group" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="PerforceServer" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="value" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="PerforceWorkspace" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="value" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="PerforceUser" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="value" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="UseP4Config" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="value" type="xs:boolean" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="WorkspacePath" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="value" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:all>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="context" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="UnitTest" />
+                  <xs:enumeration value="VisualStudio" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

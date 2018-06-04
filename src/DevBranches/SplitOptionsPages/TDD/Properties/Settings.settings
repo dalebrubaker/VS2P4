@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BruSoft.VS2P4.UnitTests.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PerforceServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">172.17.100.149:1666</Value>
+    </Setting>
+    <Setting Name="PerforceUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Dale</Value>
+    </Setting>
+    <Setting Name="PerforceWorkspace" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Dale_DaleBPC_Sandbox_Main</Value>
+    </Setting>
+    <Setting Name="TestPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d:\SandboxStream\main\Packages\Test\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

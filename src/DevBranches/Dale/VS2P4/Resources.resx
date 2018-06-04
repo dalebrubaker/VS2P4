@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="100" xml:space="preserve">
+    <value>VS2P4</value>
+  </data>
+  <data name="101" xml:space="preserve">
+    <value>This package provides access to Perforce source control.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="400" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Package.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="500" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Images_32bit.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="501" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Images_24bit.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ApplyProviderOptions" xml:space="preserve">
+    <value>Press OK to apply changes.</value>
+  </data>
+  <data name="ProviderName" xml:space="preserve">
+    <value>VS2P4</value>
+  </data>
+  <data name="QEQS_EditUncontrolledReadOnly" xml:space="preserve">
+    <value>The file {0} you are trying to edit is read only on disk. Do you want do make the file writable so you can continue editing it?</value>
+  </data>
+  <data name="State_CheckedInHeadRevision" xml:space="preserve">
+    <value>Checked in head revision</value>
+  </data>
+  <data name="State_OpenForEdit" xml:space="preserve">
+    <value>Open for edit by you</value>
+  </data>
+  <data name="Status_PendingAdd" xml:space="preserve">
+    <value>Pending add</value>
+  </data>
+  <data name="ToolWindowCaption" xml:space="preserve">
+    <value>VS2P4 Tool Window</value>
+  </data>
+  <data name="TPD_DeleteControlledFile" xml:space="preserve">
+    <value>The file {0} you are going to delete is a source controlled file. Are you sure you want to continue and delete this file?</value>
+  </data>
+  <data name="CONNECTION_FAILED" xml:space="preserve">
+    <value>Connection Failed</value>
+  </data>
+  <data name="CONNECTION_SUCCEEDED" xml:space="preserve">
+    <value>Connection Succeeded</value>
+  </data>
+  <data name="SccGlyphs4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SccGlyphs4.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="State_NeedsResolved" xml:space="preserve">
+    <value>Needs to be resolved</value>
+  </data>
+  <data name="State_OpenForBranch" xml:space="preserve">
+    <value>Open for branch</value>
+  </data>
+  <data name="State_OpenForIntegrate" xml:space="preserve">
+    <value>Open for integrate</value>
+  </data>
+  <data name="State_CheckedInPreviousRevision" xml:space="preserve">
+    <value>Checked in, not at head revision</value>
+  </data>
+  <data name="State_DeletedAtHeadRevision" xml:space="preserve">
+    <value>Deleted at the head revision</value>
+  </data>
+  <data name="State_Locked" xml:space="preserve">
+    <value>Open for edit, locked</value>
+  </data>
+  <data name="State_LockedByOtherUser" xml:space="preserve">
+    <value>Locked by other user</value>
+  </data>
+  <data name="State_OpenForAdd" xml:space="preserve">
+    <value>Open, marked for add</value>
+  </data>
+  <data name="State_OpenForDelete" xml:space="preserve">
+    <value>Open, marked for delete</value>
+  </data>
+  <data name="State_OpenForDeleteOtherUser" xml:space="preserve">
+    <value>Open, marked for delete by other user</value>
+  </data>
+  <data name="State_OpenForEditDiffers" xml:space="preserve">
+    <value>Open for edit, differs from head revision</value>
+  </data>
+  <data name="State_OpenForEditOtherUser" xml:space="preserve">
+    <value>Open for edit by other user</value>
+  </data>
+  <data name="State_OpenForRenameSource" xml:space="preserve">
+    <value>Open, renamed, source marked for delete</value>
+  </data>
+  <data name="State_OpenForRenameTarget" xml:space="preserve">
+    <value>Open, renamed, source marked for add</value>
+  </data>
+  <data name="revertPrompt" xml:space="preserve">
+    <value>Are you sure you want to revert (will lose changes to reverted files)?</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>Revert</value>
+  </data>
+  <data name="Rename_File" xml:space="preserve">
+    <value>Rename File</value>
+  </data>
+  <data name="Add_File" xml:space="preserve">
+    <value>Add File</value>
+  </data>
+  <data name="." xml:space="preserve">
+    <value />
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Add_filename_to_Perforce" xml:space="preserve">
+    <value>Add {0} to Perforce?</value>
+  </data>
+  <data name="Add_Files" xml:space="preserve">
+    <value>AddFiles</value>
+  </data>
+  <data name="Cant_Rename_File_filename_Because_It_Must_Be_Checked_Out" xml:space="preserve">
+    <value>Can't rename file {0} because it must be checked out (opened for edit).</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Checkout</value>
+  </data>
+  <data name="Checkout_Files" xml:space="preserve">
+    <value>CheckoutFiles</value>
+  </data>
+  <data name="Command_Is_Disabled" xml:space="preserve">
+    <value>command is disabled. To change, go to Tools + Options + Source Control + VS2P4 Options.</value>
+  </data>
+  <data name="Diff" xml:space="preserve">
+    <value>Diff</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error: </value>
+  </data>
+  <data name="Get_Latest_Revision" xml:space="preserve">
+    <value>GetLatestRevision</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information: </value>
+  </data>
+  <data name="Lock_Files" xml:space="preserve">
+    <value>LockFiles</value>
+  </data>
+  <data name="Delete_Files" xml:space="preserve">
+    <value>DeleteFiles</value>
+  </data>
+  <data name="RenameFile_expects_piped_fileName" xml:space="preserve">
+    <value>RenameFile expects piped fileName, instead of: {0}</value>
+  </data>
+  <data name="Rename_Files" xml:space="preserve">
+    <value>RenameFiles</value>
+  </data>
+  <data name="Revert_Files" xml:space="preserve">
+    <value>RevertFiles</value>
+  </data>
+  <data name="Revert_Files_If_Unchanged" xml:space="preserve">
+    <value>RevertFilesIfUnchanged</value>
+  </data>
+  <data name="Revert_If_Unchanged" xml:space="preserve">
+    <value>Revert If Unchanged</value>
+  </data>
+  <data name="Revision_History" xml:space="preserve">
+    <value>RevisionHistory</value>
+  </data>
+  <data name="Running_program" xml:space="preserve">
+    <value>Running program {0} with arguments {1}</value>
+  </data>
+  <data name="s" xml:space="preserve">
+    <value>Get Latest Revision</value>
+  </data>
+  <data name="Time_Lapse" xml:space="preserve">
+    <value>TimeLapse</value>
+  </data>
+  <data name="Unable_To_Connect" xml:space="preserve">
+    <value>P4Service.Connect() ArgumentException unable to connect. Server {0}, Workspace {1}</value>
+  </data>
+  <data name="View_Diff_Report" xml:space="preserve">
+    <value>View Diff Report</value>
+  </data>
+  <data name="View_Revision_History_Report" xml:space="preserve">
+    <value>View Revision History Report</value>
+  </data>
+  <data name="View_Time_Lapse_Report" xml:space="preserve">
+    <value>View Time Lapse Report</value>
+  </data>
+  <data name="VS2P4_Options" xml:space="preserve">
+    <value>VS2P4 Options</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning: </value>
+  </data>
+  <data name="Connected_To" xml:space="preserve">
+    <value>Connected to {0} as {1} and workspace {2}</value>
+  </data>
+  <data name="QEQS_SaveReadOnly" xml:space="preserve">
+    <value>The file {0} you are trying to save is read only on disk. Do you want do make the file writable so it can be saved?</value>
+  </data>
+  <data name="Cant_Remove_File_filename_Because_It_Is_Checked_Out" xml:space="preserve">
+    <value>Can't remove file {0} because it is checked out (opened for edit).</value>
+  </data>
+</root>

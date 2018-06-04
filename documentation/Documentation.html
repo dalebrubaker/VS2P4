@@ -1,0 +1,303 @@
+
+<div class="wikidoc"><em>Note: See Release Notes at the bottom of this page.</em></div>
+<div class="wikidoc"><strong>Features:</strong></div>
+<div class="wikidoc">
+<ul>
+<li>This package can be installed from Visual Studio Gallery using Tools &#43; Extension Manager.
+</li><li>This package is open-source and is hosted on Codeplex. </li><li>The Perforce connection settings (Server, UserName, etc.) are set in Tools <span style="text-decoration:underline">
+Options </span>Source Control &#43; VS2P4 and are persisted by Visual Studio between sessions.
+<ul>
+<li>You can enter one set of connection information, or you can tell VS2P4 to rely on P4CONFIG, allowing you to move between connection configurations.
+</li></ul>
+</li><li>No information is persisted to the project files or the solution (.sln) file.
+<ul>
+<li>All projects are always assumed to be under source control. If a file is not recognized by Perforce, a blank icon will appear.
+</li><li>If your project is marked to use another source control plugin (e.g. P4SCC) </li><li>and if you have that source control plugin installed, </li><li>VS will automatically change to that source control program. </li><li>You'll have to manually change the source control to VS2P4 each time. </li><li>Preferably uninstall the plugin (e.g. P4SCC), or even remove their source control from the solution and projects.
+</li></ul>
+</li><li>An added file is Marked for Add into Perforce. AutoAdd is optional. </li><li>A deleted file is Marked for Delete in Perforce. AutoDelete is optional. </li><li>File rename is carried out in Perforce (integration is done, history is preserved).
+</li><li>But you can't revert a renamed file from within Visual Studio. </li><li>All commands can be done on an entire project (or even the entire solution) at a time.
+</li><li>There is an option whether or not to prompt before reverting files (and possibly losing changes).
+</li><li>Icons conform to P4V icons as closely as possible. See FileState.cs for details.
+<ul>
+<li>You can visually see files that need to be resolved or files that are not at the head revision.
+</li></ul>
+</li><li>Logging at various levels (e.g. Error or Information) goes to the Output Window under VS2P4.
+<ul>
+<li>Starting VS (devenv.exe) with /log will cause logging to go also to ActivityLog.xml, e.g. %AppData%\Microsoft\VisualStudio\10.0\ActivityLog.XML,&nbsp;depending on the Logging level set in the Options window. Open ActivityLog.XML in Internet Explorer to
+ see a more readable version of the log. </li><li>Note that Logging at Information level causes significant slowness. </li></ul>
+</li><li>Most of the work getting file states (glyphs) from Perforce is done on a background thread.
+</li></ul>
+<p><strong>FAQ:</strong></p>
+<p><strong>&nbsp;</strong>1. I'm having trouble connecting, or files aren't showing as &quot;under Perforce&quot; when they should be.</p>
+<ul>
+<li>Run &quot;p4 info&quot; from a cmd or PowerShell window <strong>at the location of your sln file</strong>. &quot;Server address&quot; corresponds to &quot;Server&quot; and &quot;Client Name&quot; corresponds to &quot;Workspace&quot; on the VS2P4 Connection dialog (under Tools &#43; Options &#43; Source Control).&nbsp;
+</li></ul>
+<strong>Limitations:</strong>
+<ul>
+<li>The Submit command is not supported (i.e., you can check out but you can't check in).
+<ul>
+<li>The intent is to use P4 or P4V to manage changelist and do submission. </li></ul>
+</li><li>Some commands (Reports) currently use P4.EXE. </li><li>A file that is Added or Renamed must be checked in (submitted) and checked out again (opened for edit) before it can be Renamed again.
+</li></ul>
+</div>
+<div class="wikidoc"><strong>Commands:</strong><br>
+1. Edit (Check out) <br>
+2. Mark For Add (adds a file not in Perforce to Perforce) <br>
+3. Revert If Unchanged <br>
+4. Revert <br>
+5. Get Latest Revision <br>
+6. Revision Graph <br>
+7. Diff Against Have Revision (Set environment variable $P4DIFF to change the Diff program.)</div>
+<div class="wikidoc"><span style="white-space:pre">&nbsp;</span>You may need to do this command: p4 set P4DIFF=P4MERGE<br>
+8. Time-lapse View <br>
+9. Refresh All Glyphs<br>
+<br>
+Note that each command 1 through 8 can be disabled on the Options page.</div>
+<div class="wikidoc"><strong>Glyphs(Icons):</strong></div>
+<div class="wikidoc"><em>Note that VS limits us to their 12 standard icons plus only 4 custom icons.&nbsp;</em>:(</div>
+<div class="wikidoc">
+<ul>
+<li><strong>&nbsp;</strong>NotSet --&nbsp;<span style="white-space:pre">Solid Red circle with white dash</span>&nbsp;(shown until Perforce state is retrieved on background thread)
+</li><li>NotInPerforce<span style="white-space:pre"> --</span>Blank (<span style="white-space:pre">No
+</span>glyph) </li><li><span style="white-space:pre">CheckedInHeadRevision -- Page with green dot in lower right&nbsp;corner</span>
+</li><li><span style="white-space:pre">CheckedInPreviousRevision -- Yellow triangle</span>
+</li><li><span style="white-space:pre">OpenForEdit</span>&nbsp;(checked out)<span style="white-space:pre"> --Red check mark</span>
+</li><li><span style="white-space:pre">OpenForEditOtherUser -- Page with green dot in lower right&nbsp;corne</span>r (same as CheckedInHeadRevision)
+</li><li>OpenForEditDiffers<span style="white-space:pre"> --Yellow triangle</span>&nbsp;(save as CheckedInPreviousRevision)
+</li><li>OpenForAdd&nbsp;&nbsp;-- Red plus (result of a VS Add or a VS2P4 Add) </li><li>OpenForRenameSource &nbsp;--&nbsp;Red circle with diagonal (Shouldn't see this in VS)
+</li><li>OpenForRenameTarget -- Red plus (result of a VS Rename) </li><li>Locked<span style="white-space:pre"> <span style="white-space:pre">-- </span>
+Padlock black outline</span> </li><li><span style="white-space:pre">LockedByOtherUser -- Page with green dot in lower
+</span>right&nbsp;<span style="white-space:pre">corner</span>&nbsp;&nbsp;(same as CheckedInHeadRevision)
+</li><li>OpenForDelete --<span style="white-space:pre"> <span style="white-space:pre">
+&nbsp;</span>Red circle with diagonal (Shouldn't see this in </span>VS<span style="white-space:pre">)</span>
+</li><li><span style="white-space:pre">OpenForDeleteOtherUser -- Red circle with diagonal (Shouldn't see this in VS)</span>
+</li><li><span style="white-space:pre">DeletedAtHeadRevision -- <span style="white-space:pre">
+Red circle with diagonal (Shouldn't see this in VS)</span></span> </li></ul>
+</div>
+<div class="wikidoc"><strong><span style="white-space:pre">Release Notes:</span></strong></div>
+<div class="wikidoc">
+<ul>
+<li><span style="white-space:pre">Significant Changes in 1.1:</span><br>
+<ul>
+<li><span style="white-space:pre">Fixed tab order in options control.</span> </li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.2:</span>
+<ul>
+<li><span style="white-space:pre">Fixed problem where VS2P4 was unnecessarily checking out project files after opening a solution</span>
+</li><li><span style="white-space:pre">Added &quot;Use P4Config instead&quot; checkbox to Options</span>
+<ul>
+<li><span style="white-space:pre">Checking it causes connections to be based on the environment (e.g. P4Config) instead of explicit settings.&nbsp;</span>
+</li><li><span style="white-space:pre">&nbsp;This allows you to connect to different Perforce servers and workspaces without changing VS2P4 Options.&nbsp;</span>
+</li><li><span style="white-space:pre">&nbsp;Note that the connection is based on the location of the solution file.&nbsp;&nbsp;</span>
+</li><li><span style="white-space:pre">&nbsp;e.g. environment variable P4CONFIG might be set to p4.cfg. The p4.cfg file at the root of a workspace might contain:&nbsp;</span>
+<ul>
+<li><span style="white-space:pre">P4CLIENT=DALEBPC&nbsp;</span> </li><li><span style="white-space:pre">&nbsp;P4PORT=perforce:1666&nbsp;</span> </li><li><span style="white-space:pre">&nbsp;P4USER=Dale.Brubaker</span> </li></ul>
+</li></ul>
+</li><li><span style="white-space:pre">Supported SUBST drives.</span> </li><li><span style="white-space:pre">Made Perforce file state updates <strong>much </strong>
+faster, especially for large solutions.<br>
+</span></li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.3</span>
+<ul>
+<li><span style="white-space:pre">Fixed problems making VS2P4 active after a solution was already loaded.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.31</span>
+<ul>
+<li><span style="white-space:pre">Fixed Issue Id #196: Tools &#43; VS2P4 Options confirmation dialog was asking for confirmation even when no changes were made.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.32</span>
+<ul>
+<li><span style="white-space:pre">Always prompt user for approval before making a file writable at Save.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.33</span>
+<ul>
+<li><span style="white-space:pre">Fix problem where Exclude From Project was marking for delete in Perforce.</span>
+</li><li><span style="white-space:pre">Lighter-weight and more-green checked-out icon.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.34</span>
+<ul>
+<li><span style="white-space:pre">When a file is not in the Perforce workspace, show the NotSet icon only for that file, and show correct icons&nbsp;for the&nbsp;other files.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.35</span>
+<ul>
+<li><span style="white-space:pre">When a file is not in the Perforce workspace, simply treat it as a file not controlled by Perforce.</span>
+<ul>
+<li><span style="white-space:pre">This fixes a problem where VS2P4 disallowed Rename on uncontrolled files.</span>
+</li></ul>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.36</span>
+<ul>
+<li><span style="white-space:pre">Auto-refresh&nbsp;all&nbsp;glyphs&nbsp;when&nbsp;a&nbsp;project&nbsp;is&nbsp;added&nbsp;or&nbsp;reloaded.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.37 (by Bill Leonard)</span>
+<ul>
+<li><span style="white-space:pre">Fix problems where Perforce was sometimes returning forward slashes instead of backslashes, causing VS2P4 to report the file not in Perforce.</span>
+</li><li><span style="white-space:pre">Change File Rename to allow spaces in the pathname.</span>
+</li><li><span style="white-space:pre">Persist the &quot;Use P4Config&quot; option setting.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.38 (by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Fix potential crashing when starting without a Perforce connection.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.50 (by Bill Leonard)</span>
+<ul>
+<li><span style="white-space:pre">Separated the options dialog into two separate dialogs.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes </span><span style="white-space:pre">in 1.51 11/9/11 (by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Fixed crashing bug (in Microsoft's sample code) involving service references and perhaps other &quot;special&quot; solution nodes.</span>
+</li><li><span style="white-space:pre">Improved speed of updating file states when a solution includes at least one file not under the Perforce Root.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1</span><span style="white-space:pre">.52 11/11/11 (by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Changes in 1.52 (by Dale Brubaker)</span> </li><li><span style="white-space:pre">Added better thread safety and fixed duplicate file name exceptions in version 1.51 changes.</span>
+</li><li><span style="white-space:pre">Added timestamp to log messages.</span> </li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.53 11/16/11 (by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Allow the P4 workspace to be a virtual (SUBST) drive.</span>
+<ul>
+<li><span style="white-space:pre">A filename on a virtual drive is converted to the non-virtual real path for matching to Perforce, as before.</span>
+</li><li><span style="white-space:pre">But if the Perforce root is a virtual drive, the client files must also be loaded from the virtual drive.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Improve robustness for connection issues.</span>
+</li><li><span style="white-space:pre">Handle and log exceptions on the background thread while setting file states.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.54 (by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Fix a trailing slash issue that sometimes caused a file not to appear to be under the Perforce Root</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.55 11/25/11 </span><span style="white-space:pre">(by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Fix failure of Log Level option to persist.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1</span><span style="white-space:pre">.60 12/2/11
+</span><span style="white-space:pre">(by Dale Brubaker)</span>
+<ul>
+<li><span style="white-space:pre">Fixed problem where child files (e.g. the Form1.designer.cs file under Form1.cs) were not being handled when the parent was selected.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.70 2/3/12</span>
+<ul>
+<li><span style="white-space:pre">Changed P4.Net files (p4dn and p4api DLLs) to support Perforce 2011.1 stream depot files (2011.1 is the first version which supports streams).</span>
+</li><li><span style="white-space:pre">Accommodate cases where the Perforce root has forward slashes instead of backward slashes.</span>
+</li><li><span style="white-space:pre">Fixed the Move command to do a P4.Net move instead of running P4.EXE. This means that reverting either the add or the delete reverts them both.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.71 2/4/12</span>
+<ul>
+<li><span style="white-space:pre">Recompiled P4.Net files with VS2010 compilers instead of VS2005 compilers (VC10 instead of VC8), because of crashing error due to side-by-side errors.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.72 2/7/12</span>
+<ul>
+<li><span style="white-space:pre">Don't allow deletion of a checked-out file (opened for edit).</span>
+</li><li><span style="white-space:pre">Developer changes for unit testing -- use environment variables instead of Settings.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in 1.73 3/2/12</span>
+<ul>
+<li><span style="white-space:pre">Support Visual Studio 11 Beta</span> </li></ul>
+</li><li><span style="white-space:pre">Significant Changes in1.74 3/15/12</span>
+<ul>
+<li><span style="white-space:pre">&nbsp;</span>Very significant performance improvements, especially for solutions with thousands of files.
+</li></ul>
+</li><li><span style="white-space:pre">Significant Changes in1.75 3/31/12</span>
+<ul>
+<li><span style="white-space:pre">Allow rename of a file Marked for Add as well as a file Checked Out</span>
+</li><li><span style="white-space:pre">Allow rename of a folder</span> </li><li><span style="white-space:pre">Made QueryStatus() a bit faster (right clicking on Solution or any other node).</span>
+<ul>
+<li><span style="white-space:pre">But it's still slower than when VS2P4 is not enabled, as we must check the file states to see what Context Menu items should be enabled.</span>
+</li></ul>
+</li><li><span style="white-space:pre">Merged in Bill Leonard's dev branch. Bill did the following:</span>
+<ul>
+<li><span style="white-space:pre">Fixed several timing problems and race conditions with P4Cache. Implemented a wait mechanism for waiting for the cache to update for tests.</span>
+</li><li><span style="white-space:pre">Implemented an XML-based mechanism for getting default settings for the Perforce connection information. This allows unit tests to have different settings
+</span>
+<ul>
+<li><span style="white-space:pre">depending on what is being tested. Also allows the user to set some defaults for Visual Studio connections based on the solution name, or general defaults.</span>
+</li></ul>
+</li></ul>
+</li></ul>
+</li><li>Significant Changes in 1.76
+<ul>
+<li>Fixed an ArgumentNullException in Map.IsFileUnderRoot() that could occur when nothing in the solution is under source control.
+</li></ul>
+</li><li>Significant Changes in 1.77 4/18/2012
+<ul>
+<li>On Connection Options dialog, enable the Test button even when &quot;Use P4Config instead&quot; is checked.
+</li><li>Much faster start-up for opening a new solution (in many cases was checking Perforce one file at a time).
+</li><li>Fixed bug -- we weren't persisting Connection settings between sessions. </li></ul>
+</li><li>Significant Changes in&nbsp;1.784/20/12
+<ul>
+<li>Added an option on the Command Options dialog to &quot;Ignore Files Not Under Perforce Root&quot;.&nbsp;
+<ul>
+<li>Checking this box will make solutions refresh faster when they have lots of files not under the Perforce root.
+</li><li>But &quot;non-standard&quot; workspace mappings could cause VS2P4 to show files &quot;not under Perforce control&quot; that actually were under Perforce control.
+</li><li>The default (not checked) is to rely on Perforce to determine which files are under Perforce control.
+</li></ul>
+</li></ul>
+</li><li>Significant Changes in&nbsp;1.794/21/12
+<ul>
+<li>Corrected &quot;Ignore Files Not Under Perforce Root&quot; to default to not-checked. </li></ul>
+</li><li>Significant Changes in&nbsp;1.806/5/12
+<ul>
+<li>Fixed failure to persist global options for connection options. </li><li>Changed global option names to avoid conflicts with other packages. </li></ul>
+</li><li>Significant Changes in&nbsp;1.816/23/12
+<ul>
+<li>Speed improvement where UI might seem to hang for a bit. As a result, the context menu for a file won't show P4 options until Perforce file states have been updated.
+</li><li>Allow editing of files opened for branching or integration. Thanks to Anthony Brien for this fix.
+</li></ul>
+</li><li>Significant Changes in 1.82 6/29/12
+<ul>
+<li>Fixed bug where only the last file of a deleted pair of parent/subsidiary files was marked for delete in Perforce.&nbsp;For example, deleting a WinForm Form1.cs would physically delete both Form1.cs and Form1.designer.cs, but Perforces wasn't &quot;told&quot; about
+ Form1.cs </li></ul>
+</li><li>Significant Changes in 1.83 8/19/12
+<ul>
+<li>Allow Mark for Add of files that are Marked for Delete. </li><li>Fixed problem where File Open Web Site tried to add files before VS2P4 was ready to connect to Perforce.
+<ul>
+<li>But note that File Open Web Site creates a solution in the default location which may not be under the Perforce root you expect!&nbsp;
+</li><li>You'll need to save the solution under the root, and close and re-open it, before proper connections to Perforce can be made.
+</li></ul>
+</li></ul>
+</li><li>Significant Changes in 1.84 9/3/12
+<ul>
+<li>Fixed bug where files deleted from C&#43;&#43; projects weren't being deleted from Perforce.
+</li></ul>
+</li><li>Significant Changes in 1.85 3/15/13
+<ul>
+<li>Do not close the connection when loading files.
+<ul>
+<li>This hurts the proxy in remote sites, and therefore causes the solution to load slower. [Thanks to vosherman.]
+</li></ul>
+</li><li>After editing a file and then an external client (e.g. P4V) changes the file state,
+<ul>
+<li>allow VS2P4 to checkout and edit the file again instead of complaining about it's being read-only. [Thanks to jbdube.]
+</li></ul>
+</li><li>Fixed problem where VS 2012 simply wouldn't work with VS2P4 -- all files showed red icons and buttons were disabled. [Thanks to oroussea.]
+</li></ul>
+</li><li>Significant Changes in 1.86 3/29/13 [Thanks to jspelletier]
+<ul>
+<li>Removed writable file popup occurring when trying to save a file that VS2P4 thinks is in checkout but is not.
+</li><li>Removed writable file popup occurring after reverting a file that is not up to date(2 cases)
+</li><li>VS2012: Fix refresh when the solution format is VS2012 when loading a solution:
+<ul>
+<li>With VS2010 sln format: all the projects are already loaded when the OnAfterOpenSolution() is called and OnAfterLoadProject() is not called.
+<ul>
+<li>Thus the full refresh of the solution works. </li></ul>
+</li><li>With VS2012 sln format: When OnAfterOpenSolution() is called the projects are not loaded yet and OnAfterLoadProject will get called after each project
+</li><li>Previously, when refreshing, VS2P4 was always refreshing the status of the whole solution.
+<ul>
+<li>This means that with a solution of 50 projects it was refreshing the solution 50 times instead of refreshing the individual project that gets loaded. This was taking forever and blocking the UI almost always during the refresh.
+</li></ul>
+</li><li>Note: When working in VS2012 with the VS2010 file formats files stays in VS2010 format until you run the performance wizard.
+<ul>
+<li>When this occurs VS silently creates a performance project and convert your solution to VS2012 format which triggered that problem.
+</li></ul>
+</li></ul>
+</li></ul>
+</li><li>Significant Changes in 1.87 10/14/13
+<ul>
+<li>1.86 was too aggressive in minimizing refreshes and sometimes a &quot;collapsed&quot; project would not be considered.
+</li><li>Now we always refresh everything when we open a new solution. </li><li>Hopefully we now support VS2013. No promises. Tested with VS 2013 RC, and it seems to work.
+</li></ul>
+</li><li>&nbsp;Significant Changes in 1.90&nbsp;7/24/15
+<ul>
+<li>Now supports Visual Studio 2015. Not extensively tested, and essentially not supported.
+</li><li>This product is essentially end-of-life as far as the author is concerned. But you have the source code if you want to debug it for yourself. Or maybe (hopefully) someone will take it over.
+</li></ul>
+</li></ul>
+</div>

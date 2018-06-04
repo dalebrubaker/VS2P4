@@ -1,0 +1,2 @@
+This solution includes a dependency on P4dn.dll and P4api.dll. Those dll's are included in this solution.
+The files are from P4.Net. See http://p4dotnet.sourceforge.net/index.php/P4.Net_Overview
