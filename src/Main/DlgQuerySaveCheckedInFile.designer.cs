@@ -53,7 +53,7 @@ namespace BruSoft.VS2P4
             this.msgText.Size = new System.Drawing.Size(517, 51);
             this.msgText.TabIndex = 1;
             this.msgText.Text = "The read only file {0} is under source control and checked in.What do you want to" +
-                " do?";
+    " do?";
             // 
             // btnCancel
             // 
@@ -105,6 +105,7 @@ namespace BruSoft.VS2P4
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnCheckout);
             this.Controls.Add(this.msgText);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "DlgQuerySaveCheckedInFile";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Microsoft Visual Studio";

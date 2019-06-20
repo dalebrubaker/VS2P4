@@ -54,7 +54,7 @@ namespace BruSoft.VS2P4
     // Register the source control provider's service (implementing IVsScciProvider interface)
     [MsVsShell.ProvideService(typeof(SccProviderService), ServiceName = "VS2P4 Source Control Provider Service")]
     // Register the source control provider to be visible in Tools/Options/VS2P4SourceControl/Plugin dropdown selector
-    [ProvideSourceControlProvider("VS2P4 Source Control Provider", "#100")]
+    [@ProvideSourceControlProvider("VS2P4 Source Control Provider", "#100")]
     // Pre-load the package when the command UI context is asserted (the provider will be automatically loaded after restarting the shell if it was active last time the shell was shutdown)
     [MsVsShell.ProvideAutoLoad("8358dd60-00b0-478a-83b8-ea8ae3ecdaa2")]
     // Register the key used for persisting solution properties, so the IDE will know to load the source control package when opening a controlled solution containing properties written by this package
