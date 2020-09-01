@@ -824,7 +824,7 @@ namespace BruSoft.VS2P4
             {
                 Log.Warning(warning);
             }
-            RunCommandNoWait("P4V.EXE", String.Format("{0} -cmd \"history {1}\"", GetConnectionString(), fileName));
+            RunCommandNoWait("P4VC.EXE", String.Format("{0} history {1}", GetConnectionString(), fileName));
             return true;
         }
 
@@ -859,7 +859,7 @@ namespace BruSoft.VS2P4
             {
                 Log.Warning(warning);
             }
-            RunCommandNoWait("P4V.EXE", String.Format("{0} -cmd \"annotate -i {1}\"", GetConnectionString(), fileName));
+            RunCommandNoWait("P4VC.EXE", String.Format("{0} timelapse {1}", GetConnectionString(), fileName));
             return true;
         }
 
