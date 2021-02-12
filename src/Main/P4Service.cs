@@ -18,6 +18,7 @@ namespace BruSoft.VS2P4
     /// </summary>
     public class P4Service : IDisposable
     {
+        private const string P4CmdLinePath = "P4VC";
         private readonly Map _map;
         private P4Connection _p4;
 
@@ -520,6 +521,28 @@ namespace BruSoft.VS2P4
             return fileState;
         }
         /// <summary>
+        /// Get all the pending changelist for the current workspace
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, string> GetPendingChangelists()
+        {
+            P4RecordSet recordSet;
+            string message = "";
+            var result = SendCommand("changes", out message, out recordSet, "-c", Workspace, "-s", "pending", "-l");
+            if (!result)
+            {
+                return null;
+            }
+            var output = new Dictionary<int, string>();
+            foreach (var record in recordSet.Records)
+            {
+                var changeID = Convert.ToInt32(record.Fields["change"]);
+                var description = record.Fields["desc"];
+                output.Add(changeID, description);
+            }
+            return output;
+        }
+        /// <summary>
         /// Get the FileState for each files in vsFileNames.
         /// The key to state must be the vsFileNames, not the p4FileNames
         /// </summary>
@@ -824,7 +847,7 @@ namespace BruSoft.VS2P4
             {
                 Log.Warning(warning);
             }
-            RunCommandNoWait("P4VC.EXE", String.Format("{0} history {1}", GetConnectionString(), fileName));
+            RunCommandNoWait(P4CmdLinePath, String.Format("{0} history \"{1}\"", GetConnectionString(), fileName));
             return true;
         }
 
@@ -842,7 +865,7 @@ namespace BruSoft.VS2P4
             {
                 Log.Warning(warning);
             }
-            RunCommandNoWait("P4.EXE", String.Format("{0} diff \"{1}\"", GetConnectionString(), fileName));
+            RunCommandNoWait(P4CmdLinePath, String.Format("{0} diff \"{1}\"", GetConnectionString(), fileName));
             return true;
         }
 
@@ -859,7 +882,7 @@ namespace BruSoft.VS2P4
             {
                 Log.Warning(warning);
             }
-            RunCommandNoWait("P4VC.EXE", String.Format("{0} timelapse {1}", GetConnectionString(), fileName));
+            RunCommandNoWait(P4CmdLinePath, String.Format("{0} timelapse \"{1}\"", GetConnectionString(), fileName));
             return true;
         }
 
