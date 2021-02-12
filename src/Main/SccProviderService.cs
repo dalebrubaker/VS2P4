@@ -943,7 +943,9 @@ namespace BruSoft.VS2P4
                 }
                 else
                 {
-                    var dlgAskCheckout = new DlgQueryEditCheckedInFile(fileName);
+                    var changelists = _p4Service.GetPendingChangelists();
+
+                    var dlgAskCheckout = new DlgQueryEditCheckedInFile(fileName, changelists);
                     if ((rgfQueryEdit & (uint)tagVSQueryEditFlags.QEF_SilentMode) != 0)
                     {
                         // When called in silent mode, attempt the checkout

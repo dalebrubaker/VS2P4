@@ -10,6 +10,8 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -25,17 +27,29 @@ namespace BruSoft.VS2P4
         public const int qecifEditInMemory = 2;
         public const int qecifCancelEdit = 3;
 
+        private static int lastUsedChangelist = 0;
+
         int _answer = qecifCancelEdit;
-        
+
         public int Answer
         {
             get { return _answer; }
             set { _answer = value; }
         }
 
-        public DlgQueryEditCheckedInFile(string filename)
+        public int SelectedChangelist { get; private set; }
+
+        public DlgQueryEditCheckedInFile(string filename, Dictionary<int, string> changelists)
         {
             InitializeComponent();
+
+            comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = 0, Description = "<default>" });
+            comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = -1, Description = "New" });
+            foreach (var cl in changelists)
+            {
+                comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = cl.Key, Description = $"{cl.Key} - {cl.Value}" });
+            }
+            comboBoxChangeLists.SelectedItem = comboBoxChangeLists.Items.Cast<ChangelistItem>().FirstOrDefault(s => s.Number == lastUsedChangelist);
 
             // Format the message text with the current file name
             msgText.Text = String.Format(CultureInfo.CurrentUICulture, msgText.Text, filename);
@@ -43,6 +57,10 @@ namespace BruSoft.VS2P4
 
         private void btnCheckout_Click(object sender, EventArgs e)
         {
+            var clItem = comboBoxChangeLists.SelectedItem as ChangelistItem;
+            lastUsedChangelist = clItem.Number;
+            SelectedChangelist = clItem.Number;
+
             Answer = qecifCheckout;
             Close();
         }
@@ -57,6 +75,13 @@ namespace BruSoft.VS2P4
         {
             Answer = qecifCancelEdit;
             Close();
+        }
+
+        private class ChangelistItem
+        {
+            public int Number { get; set; }
+            public string Description { get; set; }
+            public override string ToString() => Description;
         }
     }
 }
