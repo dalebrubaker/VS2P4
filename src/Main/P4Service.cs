@@ -823,7 +823,7 @@ namespace BruSoft.VS2P4
                 CreateNoWindow = true,
                 RedirectStandardError = false,
                 RedirectStandardOutput = false,
-                UseShellExecute = false,
+                UseShellExecute = true,
             };
 
             Process.Start(pinfo);
