@@ -2,6 +2,8 @@
 
 using EnvDTE;
 using BruSoft.VS2P4.Properties;
+using Microsoft.VisualStudio.Settings;
+using Microsoft.VisualStudio.Shell.Settings;
 
 namespace BruSoft.VS2P4
 {
@@ -10,12 +12,14 @@ namespace BruSoft.VS2P4
     /// </summary>
     public class P4Options
     {
-        public P4Options(ProvideSavedSettings settingsProvider)
+        public P4Options(ProvideSavedSettings settingsProvider, IServiceProvider serviceProvider)
         {
             Server = settingsProvider.PerforceServer;
             User = settingsProvider.PerforceUser;
             UseP4Config = settingsProvider.UseP4Config == null ? true : settingsProvider.UseP4Config.Value;
             Workspace = settingsProvider.PerforceWorkspace;
+
+            _settingsManager = new ShellSettingsManager(serviceProvider);
         }
 
         public bool UseP4Config { get; set; }
@@ -40,19 +44,21 @@ namespace BruSoft.VS2P4
         public bool IgnoreFilesNotUnderP4Root { get; set; }
 
         const string defaultPassword = "";
+        const string defaultCollectionPath = "VS2P4";
 #if DEBUG
         const Log.Level defaultLogLevel = Log.Level.Debug;
 #else
         const Log.Level defaultLogLevel = Log.Level.Information;
 #endif
         private const bool defaultCommandsEnabled = true;
+        private SettingsManager _settingsManager;
 
         /// <summary>
         /// Load all options and return the loaded instance of this class.
         /// </summary>
-        public static P4Options Load(ProvideSavedSettings settingsProvider)
+        public static P4Options Load(ProvideSavedSettings settingsProvider, IServiceProvider serviceProvider)
         {
-            var p4Options = new P4Options(settingsProvider);
+            var p4Options = new P4Options(settingsProvider, serviceProvider);
             p4Options.LoadPersisted(settingsProvider);
             return p4Options;
         }
@@ -83,20 +89,22 @@ namespace BruSoft.VS2P4
                 LogLevel = defaultLogLevel;
             }
 
-            IsCheckoutEnabled = LoadBoolean(OptionName.SettingIds.IsCheckoutEnabled, settingsProvider, defaultCommandsEnabled);
-            IsAddEnabled = LoadBoolean(OptionName.SettingIds.IsAddEnabled, settingsProvider, defaultCommandsEnabled);
-            IsRevertIfUnchangedEnabled = LoadBoolean(OptionName.SettingIds.IsRevertIfUnchangedEnabled, settingsProvider, defaultCommandsEnabled);
-            IsRevertEnabled = LoadBoolean(OptionName.SettingIds.IsRevertEnabled, settingsProvider, defaultCommandsEnabled);
-            PromptBeforeRevert = LoadBoolean(OptionName.SettingIds.PromptBeforeRevert, settingsProvider, defaultCommandsEnabled);
-            IsGetLatestRevisionEnabled = LoadBoolean(OptionName.SettingIds.IsGetLatestRevisionEnabled, settingsProvider, defaultCommandsEnabled);
-            IsViewRevisionHistoryEnabled = LoadBoolean(OptionName.SettingIds.IsViewRevisionHistoryEnabled, settingsProvider, defaultCommandsEnabled);
-            IsViewDiffEnabled = LoadBoolean(OptionName.SettingIds.IsViewDiffEnabled, settingsProvider, defaultCommandsEnabled);
-            IsViewTimeLapseEnabled = LoadBoolean(OptionName.SettingIds.IsViewTimeLapseEnabled, settingsProvider, defaultCommandsEnabled);
-            AutoCheckoutOnEdit = LoadBoolean(OptionName.SettingIds.AutoCheckoutOnEdit, settingsProvider, defaultCommandsEnabled);
-            AutoCheckoutOnSave = LoadBoolean(OptionName.SettingIds.AutoCheckoutOnSave, settingsProvider, defaultCommandsEnabled);
-            AutoAdd = LoadBoolean(OptionName.SettingIds.AutoAdd, settingsProvider, defaultCommandsEnabled);
-            AutoDelete = LoadBoolean(OptionName.SettingIds.AutoDelete, settingsProvider, defaultCommandsEnabled);
-            IgnoreFilesNotUnderP4Root = LoadBoolean(OptionName.SettingIds.IgnoreFilesNotUnderP4Root2, settingsProvider, false);
+            var store = _settingsManager.GetReadOnlySettingsStore(SettingsScope.UserSettings);
+
+            IsCheckoutEnabled = LoadBoolean(OptionName.SettingIds.IsCheckoutEnabled, store, defaultCommandsEnabled);
+            IsAddEnabled = LoadBoolean(OptionName.SettingIds.IsAddEnabled, store, defaultCommandsEnabled);
+            IsRevertIfUnchangedEnabled = LoadBoolean(OptionName.SettingIds.IsRevertIfUnchangedEnabled, store, defaultCommandsEnabled);
+            IsRevertEnabled = LoadBoolean(OptionName.SettingIds.IsRevertEnabled, store, defaultCommandsEnabled);
+            PromptBeforeRevert = LoadBoolean(OptionName.SettingIds.PromptBeforeRevert, store, defaultCommandsEnabled);
+            IsGetLatestRevisionEnabled = LoadBoolean(OptionName.SettingIds.IsGetLatestRevisionEnabled, store, defaultCommandsEnabled);
+            IsViewRevisionHistoryEnabled = LoadBoolean(OptionName.SettingIds.IsViewRevisionHistoryEnabled, store, defaultCommandsEnabled);
+            IsViewDiffEnabled = LoadBoolean(OptionName.SettingIds.IsViewDiffEnabled, store, defaultCommandsEnabled);
+            IsViewTimeLapseEnabled = LoadBoolean(OptionName.SettingIds.IsViewTimeLapseEnabled, store, defaultCommandsEnabled);
+            AutoCheckoutOnEdit = LoadBoolean(OptionName.SettingIds.AutoCheckoutOnEdit, store, defaultCommandsEnabled);
+            AutoCheckoutOnSave = LoadBoolean(OptionName.SettingIds.AutoCheckoutOnSave, store, defaultCommandsEnabled);
+            AutoAdd = LoadBoolean(OptionName.SettingIds.AutoAdd, store, defaultCommandsEnabled);
+            AutoDelete = LoadBoolean(OptionName.SettingIds.AutoDelete, store, defaultCommandsEnabled);
+            IgnoreFilesNotUnderP4Root = LoadBoolean(OptionName.SettingIds.IgnoreFilesNotUnderP4Root2, store, false);
             OptionName.IsFirstLoadDone = true;
 
             if (!settingsProvider.GetVariableExists(OptionName.OptionNameForSave(OptionName.SettingIds.Version180OrAfter)))
@@ -106,18 +114,9 @@ namespace BruSoft.VS2P4
             }
         }
 
-        private static bool LoadBoolean(OptionName.SettingIds name, ProvideSavedSettings settingsProvider, bool defaultValue)
+        private static bool LoadBoolean(OptionName.SettingIds name, SettingsStore settingsStore, bool defaultValue)
         {
-            var variableName = OptionName.OptionNameForLoad(name);
-            if (settingsProvider.GetVariableExists(variableName))
-            {
-                bool isEnabled;
-                var variableValue = (string)settingsProvider[name];
-                bool.TryParse(variableValue, out isEnabled);
-                return isEnabled;
-            }
-
-            return defaultValue;
+            return settingsStore.GetBoolean(defaultCollectionPath, name.ToString(), defaultValue);
         }
 
         /// <summary>
@@ -129,27 +128,30 @@ namespace BruSoft.VS2P4
             {
                 throw new InvalidOperationException("P4Options.Save called without a settings provider.");
             }
+
+            var store = _settingsManager.GetWritableSettingsStore(SettingsScope.UserSettings);
+
             Save(OptionName.SettingIds.UseP4Config, UseP4Config.ToString(), settingsProvider);
             Save(OptionName.SettingIds.Server, Server, settingsProvider);
             Save(OptionName.SettingIds.User, User, settingsProvider);
             Save(OptionName.SettingIds.Password, Password, settingsProvider);
             Save(OptionName.SettingIds.Workspace, Workspace, settingsProvider);
             Save(OptionName.SettingIds.LogLevel, LogLevel.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsCheckoutEnabled, IsCheckoutEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsAddEnabled, IsAddEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsRevertIfUnchangedEnabled, IsRevertIfUnchangedEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsRevertEnabled, IsRevertEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.PromptBeforeRevert, PromptBeforeRevert.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsGetLatestRevisionEnabled, IsGetLatestRevisionEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsViewRevisionHistoryEnabled, IsViewRevisionHistoryEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsViewDiffEnabled, IsViewDiffEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IsViewTimeLapseEnabled, IsViewTimeLapseEnabled.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.AutoCheckoutOnEdit, AutoCheckoutOnEdit.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.AutoCheckoutOnSave, AutoCheckoutOnSave.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.AutoAdd, AutoAdd.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.AutoDelete, AutoDelete.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.IgnoreFilesNotUnderP4Root2, IgnoreFilesNotUnderP4Root.ToString(), settingsProvider);
-            Save(OptionName.SettingIds.Version180OrAfter, "true", settingsProvider);
+            SaveBoolean(OptionName.SettingIds.IsCheckoutEnabled, IsCheckoutEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsAddEnabled, IsAddEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsRevertIfUnchangedEnabled, IsRevertIfUnchangedEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsRevertEnabled, IsRevertEnabled, store);
+            SaveBoolean(OptionName.SettingIds.PromptBeforeRevert, PromptBeforeRevert, store);
+            SaveBoolean(OptionName.SettingIds.IsGetLatestRevisionEnabled, IsGetLatestRevisionEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsViewRevisionHistoryEnabled, IsViewRevisionHistoryEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsViewDiffEnabled, IsViewDiffEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsViewTimeLapseEnabled, IsViewTimeLapseEnabled, store);
+            SaveBoolean(OptionName.SettingIds.AutoCheckoutOnEdit, AutoCheckoutOnEdit, store);
+            SaveBoolean(OptionName.SettingIds.AutoCheckoutOnSave, AutoCheckoutOnSave, store);
+            SaveBoolean(OptionName.SettingIds.AutoAdd, AutoAdd, store);
+            SaveBoolean(OptionName.SettingIds.AutoDelete, AutoDelete, store);
+            SaveBoolean(OptionName.SettingIds.IgnoreFilesNotUnderP4Root2, IgnoreFilesNotUnderP4Root, store);
+            SaveBoolean(OptionName.SettingIds.Version180OrAfter, true, store);
         }
 
         private static void Save(OptionName.SettingIds name, string variableValue, ProvideSavedSettings settingsProvider)
@@ -164,6 +166,15 @@ namespace BruSoft.VS2P4
                 settingsProvider[name] = variableValue;
                 settingsProvider.SetVariablePersists(variableName, true);
             }
+        }
+
+        private static void SaveBoolean(OptionName.SettingIds name, bool variableValue, WritableSettingsStore settingsStore)
+        {
+            if (!settingsStore.CollectionExists(defaultCollectionPath))
+            {
+                settingsStore.CreateCollection(defaultCollectionPath);
+            }
+            settingsStore.SetBoolean(defaultCollectionPath, name.ToString(), variableValue);
         }
 
         public override string ToString()

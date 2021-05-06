@@ -2091,7 +2091,7 @@ namespace BruSoft.VS2P4
             {
                 _persistedSettings = new PersistedP4OptionSettings(defaults);
             }
-            Options = P4Options.Load(_persistedSettings);
+            Options = P4Options.Load(_persistedSettings, _sccProvider);
             persistedSettings = _persistedSettings;
             return Options;
         }
