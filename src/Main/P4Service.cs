@@ -111,27 +111,41 @@ namespace BruSoft.VS2P4
                 return;
             }
 
-            try
+            do
             {
-                // .Api must be set before the call to Connect()
-                _p4.Api = 65; // 2009.1, to support P4 Move. See http://kb.perforce.com/article/512/perforce-protocol-levels  
-                 
-                _p4.Connect();
-            }
-            catch (P4API.Exceptions.PerforceInitializationError)
-            {
-                Log.Error(String.Format(Resources.Unable_To_Connect, _p4.Port, _p4.Client));
-                IsConnected = false;
-                throw;
-            }
+                try
+                {
+                    // .Api must be set before the call to Connect()
+                    _p4.Api = 65; // 2009.1, to support P4 Move. See http://kb.perforce.com/article/512/perforce-protocol-levels  
 
-            // There seems to be a problem in P4.Net IsValidConnection() -- the login check always succeeds.
-            IsConnected = _p4.IsValidConnection(true, true);
-            if (!IsConnected)
-            {
-                Log.Error(String.Format(Resources.Unable_To_Connect, _p4.Port, _p4.Client));
-                throw new ArgumentException("Not a valid workspace.");
-            }
+                    _p4.Connect();
+                }
+                catch (P4API.Exceptions.PerforceInitializationError)
+                {
+                    Log.Error(String.Format(Resources.Unable_To_Connect, _p4.Port, _p4.Client));
+                    IsConnected = false;
+                    throw;
+                }
+
+                // There seems to be a problem in P4.Net IsValidConnection() -- the login check always succeeds.
+                IsConnected = _p4.IsValidConnection(true, true);
+                if (IsConnected)
+                {
+                    break;
+                }
+
+                // If connection failed, ask for a login and try again.
+                var dlgLogin = new DlgLogin(_p4.Client, _p4.Port);
+                if (dlgLogin.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                {
+                    Log.Error(String.Format(Resources.Unable_To_Connect, _p4.Port, _p4.Client));
+                    throw new ArgumentException("Login failed");
+                }
+
+                _p4.Login(dlgLogin.Password);
+
+                dlgLogin.Dispose();
+            } while (true);
 
             P4Form client;
             try
