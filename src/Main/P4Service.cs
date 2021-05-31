@@ -421,6 +421,58 @@ namespace BruSoft.VS2P4
         }
 
         /// <summary>
+        /// Create a new changelist with the provided description
+        /// </summary>
+        /// <param name="description">The description to use for the new changelist</param>
+        /// <param name="changeListNumber">If successful, the new changelist number</param>
+        /// <returns>True on success</returns>
+        public bool CreateChangelist(string description, ref int changeListNumber)
+        {
+            var baseForm = _p4.Fetch_Form("change");
+            baseForm.Fields["Description"] = string.IsNullOrEmpty(description) ? "<VS2P4>" : description;
+            var formResult = _p4.Save_Form(baseForm);
+
+            foreach (var formMessage in formResult.Messages)
+            {
+                var pattern = @"Change (\d+) created.";
+                var match = System.Text.RegularExpressions.Regex.Match(formMessage, pattern);
+                if (match.Success && match.Groups.Count > 1)
+                {
+                    changeListNumber = Convert.ToInt32(match.Groups[1].Value);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Edit (check out) fileName.
+        /// </summary>
+        /// <param name="vsFileName">The file name to edit.</param>
+        /// <param name="changeListNumber">The changelist number to save the edit to.</param>
+        /// <param name="message">The first line of the P4 command result if no error, else the error message.</param>
+        /// <returns>false if error (see message)</returns>
+        public bool EditFile(string vsFileName, int changeListNumber, out string message)
+        {
+            if (!_map.IsVsFileNameUnderRoot(vsFileName))
+            {
+                message = string.Format("Refusing to send command {0} to Perforce for {1} because it is not under the Perforce root {2}.", "edit", vsFileName, _map.Root);
+                Log.Warning(message);
+                return false;
+            }
+            string p4FileName = GetP4FileName(vsFileName);
+            P4RecordSet recordSet;
+            if (changeListNumber > 0)
+            {
+                return SendCommand("edit", out message, out recordSet, "-c", changeListNumber.ToString(), p4FileName);
+            }
+            else
+            {
+                return SendCommand("edit", out message, out recordSet, p4FileName);
+            }
+        }
+
+        /// <summary>
         /// Lock fileName.
         /// </summary>
         /// <param name="vsFileName">The file name to lock.</param>

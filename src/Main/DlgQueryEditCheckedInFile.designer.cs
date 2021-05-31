@@ -50,14 +50,15 @@ namespace BruSoft.VS2P4
 			// 
 			this.msgText.Location = new System.Drawing.Point(4, 13);
 			this.msgText.Name = "msgText";
-			this.msgText.Size = new System.Drawing.Size(517, 51);
+			this.msgText.Size = new System.Drawing.Size(517, 44);
 			this.msgText.TabIndex = 0;
-			this.msgText.Text = "The read only file {0} is under source control and checked in.What do you want to" +
-    " do?";
+			this.msgText.Text = "The read only file\r\n{0}\r\nis under source control and checked in.What do you want " +
+    "to do?";
+			this.msgText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// btnCheckout
 			// 
-			this.btnCheckout.Location = new System.Drawing.Point(62, 67);
+			this.btnCheckout.Location = new System.Drawing.Point(57, 94);
 			this.btnCheckout.Name = "btnCheckout";
 			this.btnCheckout.Size = new System.Drawing.Size(108, 23);
 			this.btnCheckout.TabIndex = 1;
@@ -67,7 +68,7 @@ namespace BruSoft.VS2P4
 			// 
 			// btnEdit
 			// 
-			this.btnEdit.Location = new System.Drawing.Point(203, 67);
+			this.btnEdit.Location = new System.Drawing.Point(198, 94);
 			this.btnEdit.Name = "btnEdit";
 			this.btnEdit.Size = new System.Drawing.Size(132, 23);
 			this.btnEdit.TabIndex = 2;
@@ -77,7 +78,7 @@ namespace BruSoft.VS2P4
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Location = new System.Drawing.Point(366, 67);
+			this.btnCancel.Location = new System.Drawing.Point(361, 94);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(95, 23);
 			this.btnCancel.TabIndex = 3;
@@ -89,16 +90,16 @@ namespace BruSoft.VS2P4
 			// 
 			this.comboBoxChangeLists.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxChangeLists.FormattingEnabled = true;
-			this.comboBoxChangeLists.Location = new System.Drawing.Point(176, 40);
+			this.comboBoxChangeLists.Location = new System.Drawing.Point(114, 60);
 			this.comboBoxChangeLists.Name = "comboBoxChangeLists";
-			this.comboBoxChangeLists.Size = new System.Drawing.Size(180, 21);
+			this.comboBoxChangeLists.Size = new System.Drawing.Size(303, 21);
 			this.comboBoxChangeLists.TabIndex = 4;
 			// 
 			// DlgQueryEditCheckedInFile
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(523, 102);
+			this.ClientSize = new System.Drawing.Size(523, 129);
 			this.Controls.Add(this.comboBoxChangeLists);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnEdit);

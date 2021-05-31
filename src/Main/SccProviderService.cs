@@ -117,6 +117,9 @@ namespace BruSoft.VS2P4
 
         public VS2P4Package SccProvider;
 
+        public const int CL_NEW = -1;
+        public const int CL_DEFAULT = 0;
+
         #region SccProvider Service initialization/unitialization
 
         public SccProviderService(VS2P4Package sccProvider)
@@ -820,6 +823,7 @@ namespace BruSoft.VS2P4
             }
 
             VsSelection vsSelectionToCheckOut = GetVsSelectionNoFileNamesAllNodes();
+            int changelistNumber = CL_DEFAULT;
 
             try 
             {
@@ -865,7 +869,7 @@ namespace BruSoft.VS2P4
                                 case FileState.OpenForBranch:
                                 case FileState.OpenForEdit:
                                 case FileState.OpenForEditDiffers:
-                                    fMoreInfo = QueryEditFileCheckedIn(vsSelectionToCheckOut, fileName, rgfQueryEdit, ref fEditVerdict);
+                                    fMoreInfo = QueryEditFileCheckedIn(vsSelectionToCheckOut, fileName, rgfQueryEdit, ref fEditVerdict, ref changelistNumber);
                                     break;
                                 case FileState.OpenForAdd:
                                 case FileState.OpenForRenameTarget:
@@ -888,7 +892,7 @@ namespace BruSoft.VS2P4
 
                     if (pfEditVerdict == (uint)tagVSQueryEditResult.QER_EditOK && vsSelectionToCheckOut.FileNames.Count > 0)
                     {
-                        CheckoutFiles(vsSelectionToCheckOut);
+                        CheckoutFiles(vsSelectionToCheckOut, changelistNumber);
                     }
                 }
             }
@@ -924,7 +928,7 @@ namespace BruSoft.VS2P4
         /// <param name="rgfQueryEdit">The kind of query.</param>
         /// <param name="fEditVerdict">The flag whether or not edit will be allowed.</param>
         /// <returns>More Info flag.</returns>
-        private uint QueryEditFileCheckedIn(VsSelection vsSelectionToCheckOut, string fileName, uint rgfQueryEdit, ref uint fEditVerdict)
+        private uint QueryEditFileCheckedIn(VsSelection vsSelectionToCheckOut, string fileName, uint rgfQueryEdit, ref uint fEditVerdict, ref int changelistNumber)
         {
             uint fMoreInfo;
             if ((rgfQueryEdit & (uint)tagVSQueryEditFlags.QEF_ReportOnly) != 0)
@@ -963,6 +967,7 @@ namespace BruSoft.VS2P4
                         vsSelectionToCheckOut.FileNames.Add(fileName);
                         fEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
                         fMoreInfo = (uint)tagVSQueryEditResultFlags.QER_MaybeCheckedout;
+                        changelistNumber = dlgAskCheckout.SelectedChangelist;
                         // Do not forget to set QER_Changed if the content of the file on disk changes during the query edit
                         // Do not forget to set QER_Reloaded if the source control reloads the file from disk after such changing checkout.
                     }
@@ -1629,10 +1634,11 @@ namespace BruSoft.VS2P4
         /// </summary>
         /// <param name="vsSelection">The selected nodes and files.</param>
         /// <param name="commandName">The name of the command.</param>
+        /// <param name="changelistNumber">The number of the CL this command should be executed on.</param>
         /// <param name="conditionMethod">The condition that must be true before executing commandMethod.</param>
         /// <param name="commandMethod">The command to execute.</param>
         /// <returns>false if the command fails.</returns>
-        public bool ExecuteCommand(VsSelection vsSelection, string commandName, Func<string, bool> conditionMethod, Func<string, bool> commandMethod)
+        public bool ExecuteCommand(VsSelection vsSelection, string commandName, int changelistNumber, Func<string, bool> conditionMethod, Func<CommandArguments, bool> commandMethod)
         {
             if (!IsSolutionLoaded || vsSelection.FileNames.Count <= 0)
             {
@@ -1661,7 +1667,8 @@ namespace BruSoft.VS2P4
                     string sourceName = ConvertPipedFileNameToSource(fileName);
                     if (conditionMethod(sourceName))
                     {
-                        if (!commandMethod(fileName))
+                        var cmdArgs = new CommandArguments(fileName, changelistNumber);
+                        if (!commandMethod(cmdArgs))
                         {
                             success = false;
                         }
@@ -1677,6 +1684,19 @@ namespace BruSoft.VS2P4
             }
 
             return success;
+        }
+
+        /// <summary>
+        /// Execute the commandMethod named commandName if conditionMethod is true, on all files in selection. Return false if the command fails.
+        /// </summary>
+        /// <param name="vsSelection">The selected nodes and files.</param>
+        /// <param name="commandName">The name of the command.</param>
+        /// <param name="conditionMethod">The condition that must be true before executing commandMethod.</param>
+        /// <param name="commandMethod">The command to execute.</param>
+        /// <returns>false if the command fails.</returns>
+        public bool ExecuteCommand(VsSelection vsSelection, string commandName, Func<string, bool> conditionMethod, Func<CommandArguments, bool> commandMethod)
+        {
+            return ExecuteCommand(vsSelection, commandName, CL_DEFAULT, conditionMethod, commandMethod);
         }
 
         /// <summary>
@@ -1701,14 +1721,30 @@ namespace BruSoft.VS2P4
         }
 
         /// <summary>
+        /// Checkout the specified files from source control
+        /// </summary>
+        /// <param name="selection">the selected file names and nodes.</param>
+        /// <param name="changeListNumber">The number of the CL to check out files to</param>
+        /// <returns>false if the command fails.</returns>
+        public bool CheckoutFiles(VsSelection selection, int changeListNumber)
+        {
+            return ExecuteCommand(selection, Resources.Checkout_Files, changeListNumber, IsEligibleForCheckOut, CheckoutFile);
+        }
+
+        /// <summary>
         /// Checkout the specified file from source control.
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool CheckoutFile(string fileName)
+        public bool CheckoutFile(CommandArguments cmdArgs)
         {
             string message;
-            bool success = _p4Service.EditFile(fileName, out message);
+            var changelistNumber = cmdArgs.ChangelistNumber;
+            if (changelistNumber == CL_NEW)
+            {
+                _p4Service.CreateChangelist("<VS2P4>", ref changelistNumber); // TODO: prompt 
+            }
+            bool success = _p4Service.EditFile(cmdArgs.Filename, changelistNumber, out message);
             return success;
         }
 
@@ -1726,12 +1762,12 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Marks the specified file to be locked
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool LockFile(string fileName)
+        public bool LockFile(CommandArguments cmdArgs)
         {
             string message;
-            bool success = _p4Service.LockFile(fileName, out message);
+            bool success = _p4Service.LockFile(cmdArgs.Filename, out message);
             return success;
         }
 
@@ -1754,12 +1790,12 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Marks the specified file to be added to Perforce
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool AddFile(string fileName)
+        public bool AddFile(CommandArguments cmdArgs)
         {
             string message;
-            bool success = _p4Service.AddFile(fileName, out message);
+            bool success = _p4Service.AddFile(cmdArgs.Filename, out message);
             return success;
         }
 
@@ -1776,12 +1812,12 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Reverts the specified file if it is unchanged from the head revision
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool RevertFileIfUnchanged(string fileName)
+        public bool RevertFileIfUnchanged(CommandArguments cmdArgs)
         {
             string message;
-            bool success = _p4Service.RevertIfUnchangedFile(fileName, out message);
+            bool success = _p4Service.RevertIfUnchangedFile(cmdArgs.Filename, out message);
             return success;
         }
 
@@ -1811,12 +1847,12 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Reverts the specified file
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool RevertFile(string fileName)
+        public bool RevertFile(CommandArguments cmdArgs)
         {
             string message;
-            bool success = _p4Service.RevertFile(fileName, out message);
+            bool success = _p4Service.RevertFile(cmdArgs.Filename, out message);
             return success;
         }
 
@@ -1834,10 +1870,11 @@ namespace BruSoft.VS2P4
         /// Marks the specified file to be deleted from Perforce.
         /// Currently we don't have a command for this. It's done as a part of VS file removal, if AutoDelete is set.
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool DeleteFile(string fileName)
+        public bool DeleteFile(CommandArguments cmdArgs)
         {
+            var fileName = cmdArgs.Filename;
             string message;
             if (IsEligibleForRevert(fileName))
             {
@@ -1883,10 +1920,11 @@ namespace BruSoft.VS2P4
         /// Rename (actually move) the specified file.
         /// Note that for purposes of refactoring, fileNames are piped, as in sourceFile|targetFile.
         /// </summary>
-        /// <param name="pipedFileName">the file name, piped, as in sourceFile|targetFile.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool RenameFile(string pipedFileName)
+        public bool RenameFile(CommandArguments cmdArgs)
         {
+            var pipedFileName = cmdArgs.Filename;
             string[] splits = pipedFileName.Split('|');
             bool success = false;
             if (splits.Length < 2)
@@ -1993,12 +2031,12 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Get the latest revision of file
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool GetLatestRevision(string fileName)
+        public bool GetLatestRevision(CommandArguments cmdArgs)
         {
             string message;
-            bool success = _p4Service.SyncFile(fileName, out message);
+            bool success = _p4Service.SyncFile(cmdArgs.Filename, out message);
             return success;
         }
 
@@ -2015,11 +2053,11 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Show the Revision History Report in P4V.exe
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool RevisionHistory(string fileName)
+        public bool RevisionHistory(CommandArguments cmdArgs)
         {
-            return _p4Service.RevisionHistory(fileName);
+            return _p4Service.RevisionHistory(cmdArgs.Filename);
         }
 
 
@@ -2037,11 +2075,11 @@ namespace BruSoft.VS2P4
         /// Show the Diff Report (Diff of head revision against workspace file) for fileName
         /// </summary>
         /// 
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool Diff(string fileName)
+        public bool Diff(CommandArguments cmdArgs)
         {
-            return _p4Service.Diff(fileName);
+            return _p4Service.Diff(cmdArgs.Filename);
         }
 
         /// <summary>
@@ -2057,11 +2095,11 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Show the Time-Lapse Report for fileName
         /// </summary>
-        /// <param name="fileName">the file name.</param>
+        /// <param name="cmdArgs">the arguments for this command.</param>
         /// <returns>false if the command fails.</returns>
-        public bool TimeLapse(string fileName)
+        public bool TimeLapse(CommandArguments cmdArgs)
         {
-            return _p4Service.TimeLapse(fileName);
+            return _p4Service.TimeLapse(cmdArgs.Filename);
         }
 
         #endregion
@@ -2496,6 +2534,24 @@ namespace BruSoft.VS2P4
         internal bool IsCacheCurrent()
         {
             return (_p4Cache != null) && _p4Cache.IsCacheCurrent;
+        }
+
+        public class CommandArguments
+        {
+            public CommandArguments(string filename)
+            {
+                Filename = filename;
+                ChangelistNumber = CL_DEFAULT;
+            }
+
+            public CommandArguments(string filename, int changelistNumber)
+            {
+                Filename = filename;
+                ChangelistNumber = changelistNumber;
+            }
+
+            public string Filename { get; private set; }
+            public int ChangelistNumber { get; private set; }
         }
     }
 }
