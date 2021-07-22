@@ -39,6 +39,7 @@ namespace BruSoft.VS2P4
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DlgLogin));
 			this.msgText = new System.Windows.Forms.Label();
 			this.textBoxPassword = new System.Windows.Forms.TextBox();
 			this.butCancel = new System.Windows.Forms.Button();
@@ -95,6 +96,7 @@ namespace BruSoft.VS2P4
 			this.Controls.Add(this.textBoxPassword);
 			this.Controls.Add(this.msgText);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "DlgLogin";

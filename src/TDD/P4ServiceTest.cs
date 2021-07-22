@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using P4API.Exceptions;
 using System.Diagnostics;
 using System.Collections.Generic;
 
@@ -42,7 +41,7 @@ namespace BruSoft.VS2P4.UnitTests
 
 
         [TestMethod]
-        [ExpectedException(typeof(PerforceInitializationError))]
+        [ExpectedException(typeof(Perforce.P4.P4Exception))]
         public void ConnectWithBadPortTest()
         {
             var target = new P4Service("A_BAD_PORT", settings.PerforceUser, PASSWORD, settings.PerforceWorkspace, false, null, _map);

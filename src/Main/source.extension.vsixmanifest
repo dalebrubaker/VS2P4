@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="8358dd60-20b0-478a-83b8-ea8ae3ecdaa2" Version="1.96" Language="en-US" Publisher="Dale Brubaker"/>
+    <Identity Id="8358dd60-20b0-478a-83b8-ea8ae3ecdaa2" Version="2.00" Language="en-US" Publisher="Dale Brubaker"/>
     <DisplayName>VS2P4</DisplayName>
     <Description xml:space="preserve">Visual Studio To Perforce Source Control</Description>
-    <MoreInfo>http://VS2P4.codeplex.com</MoreInfo>
+    <MoreInfo>https://github.com/dalebrubaker/VS2P4</MoreInfo>
     <License>License.txt</License>
     <Icon>Package.png</Icon>
-    <PreviewImage>solution explorer.png</PreviewImage>
+    <PreviewImage>SolutionExplorer.png</PreviewImage>
   </Metadata>
   <Installation InstalledByMsi="false">
     <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
@@ -19,30 +19,3 @@
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25904.2,17.0)" DisplayName="Visual Studio core editor" />
   </Prerequisites>
 </PackageManifest>
-<!--
-    <Version>1.90</Version>
-    <Locale>1033</Locale>
-    
-    <GettingStartedGuide>http://VS2P4.codeplex.com/documentation</GettingStartedGuide>
-    
-    
-    <InstalledByMsi>false</InstalledByMsi>
-    <SupportedProducts>
-      <VisualStudio Version="10.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-    </SupportedProducts>
-    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.6" />
-  </Identifier>
-  <References>
-    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
-      <Name>Visual Studio MPF</Name>
-    </Reference>
-  </References>
-  <Content>
-    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
-  </Content>
-</Vsix>
--->

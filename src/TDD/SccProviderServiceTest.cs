@@ -89,7 +89,7 @@ namespace BruSoft.VS2P4.UnitTests
             var sccProviderService = GetSccProviderServiceInstance;
             _p4ServiceTest = new P4ServiceTest();
             sccProviderService.P4Service = new P4Service(settings.PerforceServer, settings.PerforceUser, _p4ServiceTest.PASSWORD, settings.PerforceWorkspace, false, null, _map);
-            sccProviderService.Options = new P4Options(settings);
+            sccProviderService.Options = new P4Options(settings, sccProvider);
             sccProviderService.Options.Password = _p4ServiceTest.PASSWORD;
             sccProviderService.IsFirstP4CacheUpdateComplete = true; // fake it so we get to P4Service
         }
@@ -516,7 +516,8 @@ namespace BruSoft.VS2P4.UnitTests
                 bool success = target.P4Service.AddAndSubmitFile(file, out message);
                 Assert.IsTrue(success, "Failure adding and submitting file.");
 
-                target.CheckoutFile(file);
+                var cmdArgsCheckout = new SccProviderService.CommandArguments(file, 0);
+                target.CheckoutFile(cmdArgsCheckout);
                 Assert.AreEqual(FileState.OpenForEdit, target.GetFileState(file), "Incorrect status returned");
 
                 result = target.GetSccGlyph(1, new string[] { file }, rgsiGlyphs, rgdwSccStatus);
@@ -537,7 +538,8 @@ namespace BruSoft.VS2P4.UnitTests
 
             foreach (string file in files)
             {
-                target.RevertFileIfUnchanged(file);
+                var cmdArgsRevert = new SccProviderService.CommandArguments(file, 0);
+                target.RevertFileIfUnchanged(cmdArgsRevert);
                 Assert.AreEqual(FileState.CheckedInHeadRevision, target.GetFileState(file), "Incorrect status returned");
 
                 result = target.GetSccGlyph(1, new string[] { file }, rgsiGlyphs, rgdwSccStatus);
@@ -553,7 +555,8 @@ namespace BruSoft.VS2P4.UnitTests
             project.AddItem(pendingAddFile);
             Assert.AreEqual(FileState.NotInPerforce, target.GetFileState(pendingAddFile), "Incorrect status returned");
 
-            target.AddFile(pendingAddFile);
+            var cmdArgs = new SccProviderService.CommandArguments(pendingAddFile, 0);
+            target.AddFile(cmdArgs);
             Assert.AreEqual(FileState.OpenForAdd, target.GetFileState(pendingAddFile), "Incorrect status returned");
 
             result = target.GetSccGlyph(1, new string[] { pendingAddFile }, rgsiGlyphs, rgdwSccStatus);
@@ -714,7 +717,8 @@ namespace BruSoft.VS2P4.UnitTests
             Assert.IsTrue(success, "Failure adding and submitting file.");
 
             // Check out the file so we can rename it.
-            target.CheckoutFile(fileName);
+            var cmdArgsCheckout = new SccProviderService.CommandArguments(fileName, 0);
+            target.CheckoutFile(cmdArgsCheckout);
             Assert.AreEqual(FileState.OpenForEdit, target.GetFileState(fileName), "Incorrect status returned");
 
             // Rename the item and verify the file remains controlled
@@ -978,7 +982,7 @@ namespace BruSoft.VS2P4.UnitTests
         private void ResetTestSettings(SccProviderService target)
         {
             // Reset the provider's options to our test settings.
-            target.Options = new P4Options(settings);
+            target.Options = new P4Options(settings, sccProvider);
             target.Options.Password = _p4ServiceTest.PASSWORD;
 
             // Redefine the P4Service to use our test parameters.

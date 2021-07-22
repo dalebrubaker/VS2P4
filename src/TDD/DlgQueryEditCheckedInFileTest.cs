@@ -9,6 +9,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
+using System.Collections.Generic;
 using System.Reflection;
 
 using BruSoft.VS2P4;
@@ -30,7 +31,8 @@ namespace Microsoft.Samples.VisualStudio.SourceControlIntegration.SccProvider.Un
         [TestMethod()]
         public void ConstructorTest()
         {
-            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt");
+            Dictionary<int, string> changeLists = new Dictionary<int, string>();
+            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt", changeLists);
             Assert.IsNotNull(target, "DlgQueryEditCheckedInFile cannot be created");
         }
 
@@ -40,7 +42,8 @@ namespace Microsoft.Samples.VisualStudio.SourceControlIntegration.SccProvider.Un
         [TestMethod()]
         public void btnCancel_ClickTest()
         {
-            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt");
+            Dictionary<int, string> changeLists = new Dictionary<int, string>();
+            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt", changeLists);
             MethodInfo method = typeof(DlgQueryEditCheckedInFile).GetMethod("btnCancel_Click", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(target, new object[] { null, null });
             Assert.AreEqual(target.Answer, DlgQueryEditCheckedInFile.qecifCancelEdit);
@@ -52,7 +55,8 @@ namespace Microsoft.Samples.VisualStudio.SourceControlIntegration.SccProvider.Un
         [TestMethod()]
         public void btnCheckout_ClickTest()
         {
-            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt");
+            Dictionary<int, string> changeLists = new Dictionary<int, string>();
+            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt", changeLists);
             MethodInfo method = typeof(DlgQueryEditCheckedInFile).GetMethod("btnCheckout_Click", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(target, new object[] { null, null });
             Assert.AreEqual(target.Answer, DlgQueryEditCheckedInFile.qecifCheckout);
@@ -64,7 +68,8 @@ namespace Microsoft.Samples.VisualStudio.SourceControlIntegration.SccProvider.Un
         [TestMethod()]
         public void btnEdit_ClickTest()
         {
-            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt");
+            Dictionary<int, string> changeLists = new Dictionary<int, string>();
+            DlgQueryEditCheckedInFile target = new DlgQueryEditCheckedInFile("Dummy.txt", changeLists);
             MethodInfo method = typeof(DlgQueryEditCheckedInFile).GetMethod("btnEdit_Click", BindingFlags.NonPublic | BindingFlags.Instance);
             method.Invoke(target, new object[] {null, null} );
             Assert.AreEqual(target.Answer, DlgQueryEditCheckedInFile.qecifEditInMemory);

@@ -39,77 +39,79 @@ namespace BruSoft.VS2P4
         /// </summary>
         private void InitializeComponent()
         {
-            this.msgText = new System.Windows.Forms.Label();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnCheckout = new System.Windows.Forms.Button();
-            this.btnSaveAs = new System.Windows.Forms.Button();
-            this.btnSkipSave = new System.Windows.Forms.Button();
-            this.SuspendLayout();
-            // 
-            // msgText
-            // 
-            this.msgText.Location = new System.Drawing.Point(-1, 9);
-            this.msgText.Name = "msgText";
-            this.msgText.Size = new System.Drawing.Size(517, 51);
-            this.msgText.TabIndex = 1;
-            this.msgText.Text = "The read only file {0} is under source control and checked in.What do you want to" +
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DlgQuerySaveCheckedInFile));
+			this.msgText = new System.Windows.Forms.Label();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.btnCheckout = new System.Windows.Forms.Button();
+			this.btnSaveAs = new System.Windows.Forms.Button();
+			this.btnSkipSave = new System.Windows.Forms.Button();
+			this.SuspendLayout();
+			// 
+			// msgText
+			// 
+			this.msgText.Location = new System.Drawing.Point(-1, 9);
+			this.msgText.Name = "msgText";
+			this.msgText.Size = new System.Drawing.Size(517, 51);
+			this.msgText.TabIndex = 1;
+			this.msgText.Text = "The read only file {0} is under source control and checked in.What do you want to" +
     " do?";
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Location = new System.Drawing.Point(482, 72);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(73, 23);
-            this.btnCancel.TabIndex = 5;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // btnCheckout
-            // 
-            this.btnCheckout.Location = new System.Drawing.Point(11, 72);
-            this.btnCheckout.Name = "btnCheckout";
-            this.btnCheckout.Size = new System.Drawing.Size(150, 23);
-            this.btnCheckout.TabIndex = 4;
-            this.btnCheckout.Text = "Checkout the file and save it";
-            this.btnCheckout.UseVisualStyleBackColor = true;
-            this.btnCheckout.Click += new System.EventHandler(this.btnCheckout_Click);
-            // 
-            // btnSaveAs
-            // 
-            this.btnSaveAs.Location = new System.Drawing.Point(297, 72);
-            this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(174, 23);
-            this.btnSaveAs.TabIndex = 6;
-            this.btnSaveAs.Text = "Save the file with different name";
-            this.btnSaveAs.UseVisualStyleBackColor = true;
-            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
-            // 
-            // btnSkipSave
-            // 
-            this.btnSkipSave.Location = new System.Drawing.Point(172, 72);
-            this.btnSkipSave.Name = "btnSkipSave";
-            this.btnSkipSave.Size = new System.Drawing.Size(114, 23);
-            this.btnSkipSave.TabIndex = 7;
-            this.btnSkipSave.Text = "Do not save this file";
-            this.btnSkipSave.UseVisualStyleBackColor = true;
-            this.btnSkipSave.Click += new System.EventHandler(this.btnSkipSave_Click);
-            // 
-            // DlgQuerySaveCheckedInFile
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(567, 108);
-            this.Controls.Add(this.btnSkipSave);
-            this.Controls.Add(this.btnSaveAs);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnCheckout);
-            this.Controls.Add(this.msgText);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "DlgQuerySaveCheckedInFile";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Microsoft Visual Studio";
-            this.ResumeLayout(false);
+			// 
+			// btnCancel
+			// 
+			this.btnCancel.Location = new System.Drawing.Point(482, 72);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(73, 23);
+			this.btnCancel.TabIndex = 5;
+			this.btnCancel.Text = "Cancel";
+			this.btnCancel.UseVisualStyleBackColor = true;
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			// 
+			// btnCheckout
+			// 
+			this.btnCheckout.Location = new System.Drawing.Point(11, 72);
+			this.btnCheckout.Name = "btnCheckout";
+			this.btnCheckout.Size = new System.Drawing.Size(150, 23);
+			this.btnCheckout.TabIndex = 4;
+			this.btnCheckout.Text = "Checkout the file and save it";
+			this.btnCheckout.UseVisualStyleBackColor = true;
+			this.btnCheckout.Click += new System.EventHandler(this.btnCheckout_Click);
+			// 
+			// btnSaveAs
+			// 
+			this.btnSaveAs.Location = new System.Drawing.Point(297, 72);
+			this.btnSaveAs.Name = "btnSaveAs";
+			this.btnSaveAs.Size = new System.Drawing.Size(174, 23);
+			this.btnSaveAs.TabIndex = 6;
+			this.btnSaveAs.Text = "Save the file with different name";
+			this.btnSaveAs.UseVisualStyleBackColor = true;
+			this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
+			// 
+			// btnSkipSave
+			// 
+			this.btnSkipSave.Location = new System.Drawing.Point(172, 72);
+			this.btnSkipSave.Name = "btnSkipSave";
+			this.btnSkipSave.Size = new System.Drawing.Size(114, 23);
+			this.btnSkipSave.TabIndex = 7;
+			this.btnSkipSave.Text = "Do not save this file";
+			this.btnSkipSave.UseVisualStyleBackColor = true;
+			this.btnSkipSave.Click += new System.EventHandler(this.btnSkipSave_Click);
+			// 
+			// DlgQuerySaveCheckedInFile
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(567, 108);
+			this.Controls.Add(this.btnSkipSave);
+			this.Controls.Add(this.btnSaveAs);
+			this.Controls.Add(this.btnCancel);
+			this.Controls.Add(this.btnCheckout);
+			this.Controls.Add(this.msgText);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Name = "DlgQuerySaveCheckedInFile";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "Microsoft Visual Studio";
+			this.ResumeLayout(false);
 
         }
 

@@ -2,6 +2,7 @@
 
 using EnvDTE;
 using BruSoft.VS2P4.Properties;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.Settings;
 using Microsoft.VisualStudio.Shell.Settings;
 
@@ -131,7 +132,7 @@ namespace BruSoft.VS2P4
 
             var store = _settingsManager.GetWritableSettingsStore(SettingsScope.UserSettings);
 
-            Save(OptionName.SettingIds.UseP4Config, UseP4Config.ToString(), settingsProvider);
+            SaveBoolean(OptionName.SettingIds.UseP4Config, UseP4Config, store);
             Save(OptionName.SettingIds.Server, Server, settingsProvider);
             Save(OptionName.SettingIds.User, User, settingsProvider);
             Save(OptionName.SettingIds.Password, Password, settingsProvider);

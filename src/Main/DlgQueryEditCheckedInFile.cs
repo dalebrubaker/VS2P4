@@ -45,9 +45,12 @@ namespace BruSoft.VS2P4
 
             comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = 0, Description = "<default>" });
             comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = -1, Description = "New" });
-            foreach (var cl in changelists)
+            if (changelists != null)
             {
-                comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = cl.Key, Description = $"{cl.Key} - {cl.Value}" });
+                foreach (var cl in changelists)
+                {
+                    comboBoxChangeLists.Items.Add(new ChangelistItem() { Number = cl.Key, Description = $"{cl.Key} - {cl.Value}" });
+                }
             }
             comboBoxChangeLists.SelectedItem = comboBoxChangeLists.Items.Cast<ChangelistItem>().FirstOrDefault(s => s.Number == lastUsedChangelist);
 

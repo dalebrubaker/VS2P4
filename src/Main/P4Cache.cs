@@ -321,13 +321,23 @@ namespace BruSoft.VS2P4
                 Log.Error(msg);
                 return;
             }
-            catch (P4API.Exceptions.PerforceInitializationError)
+            catch (Perforce.P4.P4Exception)
             {
                 Trace.WriteLineIf(_traceSwitch.TraceVerbose, "P4Cache.SetFileStates(IList) got PerforceInitializationError");
                 p4Service.Dispose();
                 // We can't handle this exception because we are on a background thread.
                 // But the File States will show we are not connected.
                 string msg = String.Format("PerforceInitializationError in VS2P4.P4Cache.SetFileStates() -- Unable to connect to P4 at server={0} and user={1}", _server, _user);
+                Log.Error(msg);
+                return;
+            }
+            catch (Exception)
+            {
+                Trace.WriteLineIf(_traceSwitch.TraceVerbose, "P4Cache.SetFileStates(IList) got Exception");
+                p4Service.Dispose();
+                // We can't handle this exception because we are on a background thread.
+                // But the File States will show we are not connected.
+                string msg = String.Format("Exception in VS2P4.P4Cache.SetFileStates() -- Unable to connect to P4 at server={0} and user={1}", _server, _user);
                 Log.Error(msg);
                 return;
             }

@@ -39,6 +39,7 @@ namespace BruSoft.VS2P4
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DlgQueryEditCheckedInFile));
 			this.msgText = new System.Windows.Forms.Label();
 			this.btnCheckout = new System.Windows.Forms.Button();
 			this.btnEdit = new System.Windows.Forms.Button();
@@ -106,6 +107,7 @@ namespace BruSoft.VS2P4
 			this.Controls.Add(this.btnCheckout);
 			this.Controls.Add(this.msgText);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "DlgQueryEditCheckedInFile";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Microsoft Visual Studio";

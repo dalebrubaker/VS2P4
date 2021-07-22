@@ -947,7 +947,22 @@ namespace BruSoft.VS2P4
                 }
                 else
                 {
-                    var changelists = _p4Service.GetPendingChangelists();
+                    Dictionary<int, string> changelists = null;
+                    try
+                    {
+                        if (!_p4Service.IsConnected)
+                        {
+                            _p4Service.Connect();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    finally
+                    {
+                        changelists = _p4Service.GetPendingChangelists();
+                        _p4Service.Disconnect();
+                    }
 
                     var dlgAskCheckout = new DlgQueryEditCheckedInFile(fileName, changelists);
                     if ((rgfQueryEdit & (uint)tagVSQueryEditFlags.QEF_SilentMode) != 0)
@@ -1615,7 +1630,7 @@ namespace BruSoft.VS2P4
             {
                 return FileState.NotSet;
             }
-            catch (P4API.Exceptions.PerforceInitializationError)
+            catch (Perforce.P4.P4Exception)
             {
                 return FileState.NotSet;
             }
@@ -1656,7 +1671,7 @@ namespace BruSoft.VS2P4
             {
                 return false;
             }
-            catch (P4API.Exceptions.PerforceInitializationError)
+            catch (Perforce.P4.P4Exception)
             {
                 return false;
             }
@@ -1972,9 +1987,9 @@ namespace BruSoft.VS2P4
             {
                 Log.Error(String.Format("SccProviderService.RenameFile() Exception: {0}", ex.Message));
             }
-            catch (P4API.Exceptions.PerforceInitializationError ex)
+            catch (Perforce.P4.P4Exception ex)
             {
-                Log.Error(String.Format("SccProviderService.RenameFile() Exception: {0}", ex.Message));
+                Log.Error(String.Format("SccProviderService.RenameFile() P4Exception: {0}", ex.Message));
             }
             finally
             {

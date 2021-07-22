@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 using System.Threading;
-using P4API;
 
 namespace BruSoft.VS2P4
 {
@@ -16,54 +15,28 @@ namespace BruSoft.VS2P4
     /// Be sure to use a new instance of this class on each new thread. This is a design decision of P4.Net.
     /// Be sure to Dispose of this class when through with it.
     /// </summary>
+    /// <remarks>
+    /// Docs: https://www.perforce.com/manuals/p4api.net/p4api.net_reference/
+    /// </remarks>
     public class P4Service : IDisposable
     {
         private const string P4CmdLinePath = "P4VC";
         private readonly Map _map;
-        private P4Connection _p4;
+        private Perforce.P4.Options _p4Options = null;
+        private Perforce.P4.ServerAddress _p4ServerAddress = null;
+        private Perforce.P4.Server _p4Server = null;
+        private Perforce.P4.Repository _p4Repository = null;
+        //private string _password = null;
 
         public bool IsConnected { get; set; }
 
         private readonly object _statesLock = new object();
 
-        public string Server
-        {
-            get
-            {
-                if (_p4 == null)
-                {
-                    return "";
-                }
+        private string Server { get { return _p4ServerAddress.Uri; } }
 
-                return _p4.Port;
-            }
-        }
+        private string User { get { return _p4Repository.Connection.UserName; } }
 
-        public string User
-        {
-            get
-            {
-                if (_p4 == null)
-                {
-                    return "";
-                }
-
-                return _p4.User;
-            }
-        }
-
-        public string Workspace
-        {
-            get
-            {
-                if (_p4 == null)
-                {
-                    return "";
-                }
-
-                return _p4.Client;
-            }
-        }
+        private string Workspace { get { return _p4Repository.Connection.Client.Name; } }
 
         public P4Service(string server, string user, string password, string workspace, bool useP4Config, string path, Map map)
         {
@@ -72,29 +45,33 @@ namespace BruSoft.VS2P4
             {
                 _map = new Map(true);
             }
-            _p4 = new P4Connection();
-            var tmp1 = _p4.CallingVersion;
-            _p4.Api = 65; // 2009.1, to support P4 Move. See http://kb.perforce.com/article/512/perforce-protocol-levels
+
+            //_password = password;
 
             // Before we set up the connection to Perforce, set the CWD so we pick up any changes to P4Config
             if (useP4Config)
             {
-                if (!string.IsNullOrEmpty(path))
-                {
-                    _p4.CWD = path;
-                }
-                _p4.Port = "";
-                _p4.User = "";
-                _p4.Password = "";
-                _p4.Client = "";
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+
+                _p4Options = new Perforce.P4.Options();
+                _p4Options["ProgramName"] = "VS2P4";
+                _p4Options["ProgramVersion"] = fvi.FileVersion;
+                _p4Options["cwd"] = path;
             }
             else
             {
-                _p4.Port = server;
-                _p4.User = user;
-                _p4.Password = password;
-                _p4.Client = workspace;
+                _p4Options = null;
             }
+            _p4ServerAddress = new Perforce.P4.ServerAddress(server);
+            _p4Server = new Perforce.P4.Server(_p4ServerAddress);
+            _p4Repository = new Perforce.P4.Repository(_p4Server);
+
+            // use the connection variables for this connection
+            // _p4Repository.Connection.ApiLevel = 65; // 2009.1, to support P4 Move. See http://kb.perforce.com/article/512/perforce-protocol-levels
+            _p4Repository.Connection.UserName = user;
+            _p4Repository.Connection.Client = new Perforce.P4.Client();
+            _p4Repository.Connection.Client.Name = workspace;
 
             //Log.Information(String.Format(Resources.Connected_To, _p4.Port, _p4.User, _p4.Client));
         }
@@ -116,49 +93,39 @@ namespace BruSoft.VS2P4
                 try
                 {
                     // .Api must be set before the call to Connect()
-                    _p4.Api = 65; // 2009.1, to support P4 Move. See http://kb.perforce.com/article/512/perforce-protocol-levels  
+                    // _p4.Api = 65; // 2009.1, to support P4 Move. See http://kb.perforce.com/article/512/perforce-protocol-levels  
 
-                    _p4.Connect();
+                    _p4Repository.Connection.Connect(_p4Options);
                 }
-                catch (P4API.Exceptions.PerforceInitializationError)
+                catch (Perforce.P4.P4Exception)
                 {
-                    Log.Error(String.Format(Resources.Unable_To_Connect, _p4.Port, _p4.Client));
+                    Log.Error(String.Format(Resources.Unable_To_Connect, Server, ""));
                     IsConnected = false;
                     throw;
                 }
 
                 // There seems to be a problem in P4.Net IsValidConnection() -- the login check always succeeds.
-                IsConnected = _p4.IsValidConnection(true, true);
+
+                IsConnected = _p4Repository.Connection.connectionEstablished();
                 if (IsConnected)
                 {
                     break;
                 }
 
                 // If connection failed, ask for a login and try again.
-                var dlgLogin = new DlgLogin(_p4.Client, _p4.Port);
+                var dlgLogin = new DlgLogin(Server, "");
                 if (dlgLogin.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 {
-                    Log.Error(String.Format(Resources.Unable_To_Connect, _p4.Port, _p4.Client));
+                    Log.Error(String.Format(Resources.Unable_To_Connect, Server, ""));
                     throw new ArgumentException("Login failed");
                 }
 
-                _p4.Login(dlgLogin.Password);
+                _p4Repository.Connection.Login(dlgLogin.Password);
 
                 dlgLogin.Dispose();
             } while (true);
 
-            P4Form client;
-            try
-            {
-                client = _p4.Fetch_Form("client");
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Unable to fetch client form.\n" + ex.Message);
-                return;
-            }
-
-            var root = client["Root"];
+            var root = _p4Repository.Connection.Client.Root;
             _map.SetRoot(root);
         }
 
@@ -167,19 +134,19 @@ namespace BruSoft.VS2P4
         /// </summary>
         public void Disconnect()
         {
-            if (_p4 != null)
+            if (_p4Repository.Connection != null)
             {
-                _p4.Disconnect();
+                _p4Repository.Connection.Disconnect();
             }
             IsConnected = false;
         }
 
         public void Dispose()
         {
-            if (_p4 != null)
+            if (_p4Repository != null)
             {
-                _p4.Dispose();
-                _p4 = null;
+                _p4Repository.Dispose();
+                _p4Repository = null;
             }
         }
 
@@ -213,7 +180,7 @@ namespace BruSoft.VS2P4
                 return false;
             }
             string p4FileName = GetP4FileName(vsFileName);
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             return SendCommand(command, out message, out recordSet, p4FileName);
         }
 
@@ -243,13 +210,16 @@ namespace BruSoft.VS2P4
         /// <param name="recordSet">The recordSet from P4</param>
         /// <param name="args">The args to add to the P4 command.</param>
         /// <returns>false if error (see message)</returns>
-        private bool SendCommand(string command, out string message, out P4RecordSet recordSet, params string[] args)
+        private bool SendCommand(string command, out string message, out Perforce.P4.P4CommandResult recordSet, params string[] args)
         {
             string argsStr = Concatenate(args);
             try
             {
                 //Log.Information(String.Format("P4Service.SendCommand() Starting: {0} {1}", command, argsStr));
-                recordSet = _p4.Run(command, args);
+                var cmd = new Perforce.P4.P4Command(_p4Repository.Connection, command, true);
+                var opts = new Perforce.P4.StringList(args);
+                
+                recordSet = cmd.Run(opts);
             }
             catch (Exception ex)
             {
@@ -259,27 +229,38 @@ namespace BruSoft.VS2P4
                 return false;
             }
 
-            if (recordSet.HasErrors())
+            if (recordSet.ErrorList != null && recordSet.ErrorList.Count > 0)
             {
-                Log.Error(String.Format("P4Service.SendCommand() 1: {0}", recordSet.ErrorMessage));
-                message = recordSet.ErrorMessage;
-                return false;
+                List<string> errors = new List<string>();
+                foreach (var error in recordSet.ErrorList)
+                {
+                    if (error.SeverityLevel >= Perforce.P4.ErrorSeverity.E_FAILED)
+                    {
+                        errors.Add(error.ErrorMessage);
+                        Log.Error(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage));
+                    }
+                    else if (error.SeverityLevel == Perforce.P4.ErrorSeverity.E_WARN)
+                    {
+                        Log.Warning(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage));
+                    }
+                    else if (error.SeverityLevel == Perforce.P4.ErrorSeverity.E_INFO)
+                    {
+                        Log.Information(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage));
+                    }
+                }
+                if (errors.Count > 1)
+                {
+                    message = string.Join("\n", errors);
+                    return false;
+                }
             }
 
-            if (recordSet.HasWarnings())
-            {
-                message = Concatenate(recordSet.Warnings);
-                Log.Warning(String.Format("P4Service.SendCommand() 2: {0}", message));
-                return true;
-            }
-
-            message = Concatenate(recordSet.Messages);
+            message = Concatenate(recordSet.InfoOutput);
             if (!String.IsNullOrEmpty(message))
             {
                 Log.Information(String.Format("P4Service.SendCommand() 3: {0}", message));
             }
 
-            //Log.Information(String.Format("P4Service.SendCommand() Finished: {0} {1}", command, argsStr));
             return true;
         }
 
@@ -341,7 +322,7 @@ namespace BruSoft.VS2P4
         /// <returns>false if error (see message)</returns>
         public bool RevertIfUnchangedFile(string vsFileName, out string message)
         {
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             string p4FileName = GetP4FileName(vsFileName);
             return SendCommand("revert", out message, out recordSet, "-a", p4FileName);
         }
@@ -370,30 +351,30 @@ namespace BruSoft.VS2P4
             Connect();
             Disconnect();
 
-            P4PendingChangelist cl = null;
+            Perforce.P4.Changelist cl = null;
             try
             {
-                cl = _p4.CreatePendingChangelist("A testing changelist");
+                cl = _p4Repository.NewChangelist();
             }
             catch (NullReferenceException ex)
             {
                 Trace.WriteLine(String.Format("P4Service.AddAndSubmitFile: {0}", ex.Message));
             }
 
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             string p4FileName = GetP4FileName(vsFileName);
-            bool result = SendCommand("add", out message, out recordSet, "-c", cl.Number.ToString(), p4FileName);
+            bool result = SendCommand("add", out message, out recordSet, "-c", cl.Id.ToString(), p4FileName);
             if (!result)
             {
                 return false;
             }
 
-            P4UnParsedRecordSet unparsedRecordset = null;
+            Perforce.P4.SubmitResults unparsedRecordset = null;
             try
             {
-                unparsedRecordset = cl.Submit();
+                unparsedRecordset = cl.Submit(_p4Options);
             }
-            catch (P4API.Exceptions.RunUnParsedException ex)
+            catch (Perforce.P4.P4Exception ex)
             {
                 message = HandleRunUnParsedExceptionError(ex);
                 return false;
@@ -401,10 +382,10 @@ namespace BruSoft.VS2P4
             return true;
         }
 
-        private string HandleRunUnParsedExceptionError(P4API.Exceptions.RunUnParsedException ex)
+        private string HandleRunUnParsedExceptionError(Perforce.P4.P4Exception ex)
         {
-            string message = Concatenate(ex.Result.Messages);
-            message += "\n" + ex.Result.ErrorMessage;
+            string message = Concatenate(ex.Details);
+            //message += "\n" + ex.Result.ErrorMessage;
             Log.Error(message);
             return message;
         }
@@ -428,20 +409,9 @@ namespace BruSoft.VS2P4
         /// <returns>True on success</returns>
         public bool CreateChangelist(string description, ref int changeListNumber)
         {
-            var baseForm = _p4.Fetch_Form("change");
-            baseForm.Fields["Description"] = string.IsNullOrEmpty(description) ? "<VS2P4>" : description;
-            var formResult = _p4.Save_Form(baseForm);
-
-            foreach (var formMessage in formResult.Messages)
-            {
-                var pattern = @"Change (\d+) created.";
-                var match = System.Text.RegularExpressions.Regex.Match(formMessage, pattern);
-                if (match.Success && match.Groups.Count > 1)
-                {
-                    changeListNumber = Convert.ToInt32(match.Groups[1].Value);
-                    return true;
-                }
-            }
+            var cl = _p4Repository.NewChangelist();
+            cl.Description = string.IsNullOrEmpty(description) ? "<VS2P4>" : description;
+            changeListNumber = cl.Id;
             return false;
         }
 
@@ -461,7 +431,7 @@ namespace BruSoft.VS2P4
                 return false;
             }
             string p4FileName = GetP4FileName(vsFileName);
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             if (changeListNumber > 0)
             {
                 return SendCommand("edit", out message, out recordSet, "-c", changeListNumber.ToString(), p4FileName);
@@ -505,7 +475,7 @@ namespace BruSoft.VS2P4
         /// <returns>false if error (see message)</returns>
         public bool MoveFileOld(string fromFile, string toFile, out string message)
         {
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             string toP4FileName = GetP4FileName(toFile);
             string fromP4FileName = GetP4FileName(fromFile);
             bool result = SendCommand("integrate", out message, out recordSet, fromP4FileName, toP4FileName);
@@ -526,7 +496,7 @@ namespace BruSoft.VS2P4
         /// <returns>false if error (see message)</returns>
         public bool MoveFile(string fromFile, string toFile, out string message)
         {
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             string toP4FileName = GetP4FileName(toFile);
             string fromP4FileName = GetP4FileName(fromFile);
             return SendCommand("move", out message, out recordSet, fromP4FileName, toP4FileName);
@@ -565,7 +535,7 @@ namespace BruSoft.VS2P4
         /// <returns></returns>
         public FileState GetP4FileState(string vsFileName, out string message)
         {
-            P4RecordSet recordSet;
+            Perforce.P4.P4CommandResult recordSet;
             var p4FileName = GetP4FileName(vsFileName);
             bool result = SendCommand("fstat", out message, out recordSet, p4FileName);
             if (!result)
@@ -575,13 +545,13 @@ namespace BruSoft.VS2P4
                 return FileState.NotInPerforce;
             }
 
-            if (recordSet.Records.Length <= 0)
+            if (recordSet.TaggedOutput.Count <= 0)
             {
                 Log.Debug(string.Format("Not in Perforce (2): {0}", vsFileName));
                 return FileState.NotInPerforce;
             }
 
-            P4Record record = recordSet[0];
+            var record = recordSet.TaggedOutput[0];
             var fileState = GetFileStateFromRecordSet(record, out vsFileName);
             Log.Debug(string.Format("Perforce FileState: {0} for {1}", fileState, vsFileName));
             return fileState;
@@ -592,19 +562,13 @@ namespace BruSoft.VS2P4
         /// <returns></returns>
         public Dictionary<int, string> GetPendingChangelists()
         {
-            P4RecordSet recordSet;
-            string message = "";
-            var result = SendCommand("changes", out message, out recordSet, "-c", Workspace, "-s", "pending", "-l");
-            if (!result)
-            {
-                return null;
-            }
+            var opts = new Perforce.P4.ChangesCmdOptions(Perforce.P4.ChangesCmdFlags.FullDescription, Workspace, 0, Perforce.P4.ChangeListStatus.Pending, null);
+            var changeLists = _p4Repository.GetChangelists(opts);
+
             var output = new Dictionary<int, string>();
-            foreach (var record in recordSet.Records)
+            foreach (var changeList in changeLists)
             {
-                var changeID = Convert.ToInt32(record.Fields["change"]);
-                var description = record.Fields["desc"];
-                output.Add(changeID, description);
+                output.Add(changeList.Id, changeList.Description);
             }
             return output;
         }
@@ -675,7 +639,7 @@ namespace BruSoft.VS2P4
             {
                 return;
             }
-            P4RecordSet recordSet = null;
+            Perforce.P4.P4CommandResult recordSet = null;
             string message;
             bool result = SendCommand("fstat", out message, out recordSet, p4FileNames.ToArray());
 
@@ -686,7 +650,7 @@ namespace BruSoft.VS2P4
                 return;
             }
 
-            if (recordSet.Records.Length <= 0)
+            if (recordSet.TaggedOutput.Count <= 0)
             {
                 foreach (var vsFileName in filesUnderPerforceRoot)
                 {
@@ -698,7 +662,7 @@ namespace BruSoft.VS2P4
             // Now decode each record. Missing records must be NotInPerforce
             // The key to filesWithState is p4FileName
             var filesWithState = new Dictionary<string, FileState>(filesUnderPerforceRoot.Count);
-            foreach (P4Record record in recordSet)
+            foreach (var record in recordSet.TaggedOutput)
             {
                 string p4FileName;
                 FileState state = GetFileStateFromRecordSet(record, out p4FileName);
@@ -714,7 +678,6 @@ namespace BruSoft.VS2P4
                 statesTmp.Add(kvp.Value);
             }
 #endif
-
 
             // Now set each state we return.
             for (int i = 0; i < filesUnderPerforceRoot.Count; i++)
@@ -749,18 +712,14 @@ namespace BruSoft.VS2P4
             }
         }
 
-   
-
         /// <summary>
         /// Decode the Fields in record (returned from fstat for a file).
         /// </summary>
-        /// <param name="record">A record returned from fstat for a file</param>
+        /// <param name="fields">A record returned from fstat for a file</param>
         /// <param name="p4FileName">The P4 fileName for which this record applies</param>
         /// <returns>The FileState for the file</returns>
-        private static FileState GetFileStateFromRecordSet(P4Record record, out string p4FileName)
+        private static FileState GetFileStateFromRecordSet(Perforce.P4.TaggedObject fields, out string p4FileName)
         {
-            FieldDictionary fields = record.Fields;
-
             p4FileName = fields["clientFile"];
             p4FileName = p4FileName.Replace('/', '\\'); 
 
@@ -850,7 +809,7 @@ namespace BruSoft.VS2P4
 
             if (fields.ContainsKey("otherOpen"))
             {
-                ArrayFieldDictionary arrayFields = record.ArrayFields;
+                var arrayFields = fields;
                 if (arrayFields.ContainsKey("otherLock"))
                 {
                     return FileState.LockedByOtherUser;
@@ -858,16 +817,18 @@ namespace BruSoft.VS2P4
 
                 if (arrayFields.ContainsKey("otherAction"))
                 {
-                    string[] array = arrayFields["otherAction"];
-                    if (array.Any(val => val == "edit"))
-                    {
-                        return FileState.OpenForEditOtherUser;
-                    }
+                    /*
+                                        string[] array = arrayFields["otherAction"];
+                                        if (array.Any(val => val == "edit"))
+                                        {
+                                            return FileState.OpenForEditOtherUser;
+                                        }
 
-                    if (array.Any(val => val == "delete"))
-                    {
-                        return FileState.OpenForDeleteOtherUser;
-                    }
+                                        if (array.Any(val => val == "delete"))
+                                        {
+                                            return FileState.OpenForDeleteOtherUser;
+                                        }
+                    */
                 }
             }
 
