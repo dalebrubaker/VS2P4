@@ -266,11 +266,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' " Include="..\packages\p4api.net.2020.2.207.9205\runtimes\win-x86\native\p4bridge.dll">
+    <Content Condition=" '$(Platform)' == 'x86' " Include="..\packages\p4api.net.2020.2.207.9205\runtimes\win-x86\native\p4bridge.dll">
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>./</VSIXSubPath>
     </Content>
-    <Content Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " Include="..\packages\p4api.net.2020.2.207.9205\runtimes\win-x64\native\p4bridge.dll">
+    <Content Condition=" '$(Platform)' == 'x64' " Include="..\packages\p4api.net.2020.2.207.9205\runtimes\win-x64\native\p4bridge.dll">
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>./</VSIXSubPath>
     </Content>
