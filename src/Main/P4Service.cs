@@ -545,7 +545,7 @@ namespace BruSoft.VS2P4
                 return FileState.NotInPerforce;
             }
 
-            if (recordSet.TaggedOutput.Count <= 0)
+            if (recordSet.TaggedOutput == null || recordSet.TaggedOutput.Count <= 0)
             {
                 Log.Debug(string.Format("Not in Perforce (2): {0}", vsFileName));
                 return FileState.NotInPerforce;
