@@ -32,7 +32,7 @@ namespace BruSoft.VS2P4
 
         private readonly object _statesLock = new object();
 
-        private string Server { get { return _p4ServerAddress.Uri; } }
+        private string Server { get { return _p4Repository.Connection.Server.Address.ToString(); } }
 
         private string User { get { return _p4Repository.Connection.UserName; } }
 
