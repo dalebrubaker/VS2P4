@@ -104,10 +104,11 @@ namespace BruSoft.VS2P4
                     throw;
                 }
 
-                // There seems to be a problem in P4.Net IsValidConnection() -- the login check always succeeds.
-
                 IsConnected = _p4Repository.Connection.connectionEstablished();
-                if (IsConnected)
+
+                // We may be connected, but we may not be logged in - check ticket!
+                var credential = _p4Repository.Connection.Login(string.Empty, new Perforce.P4.Options(Perforce.P4.LoginCmdFlags.DisplayStatus, Workspace));
+                if (credential != null)
                 {
                     break;
                 }
