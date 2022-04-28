@@ -15,11 +15,6 @@ namespace BruSoft.VS2P4
     {
         public P4Options(ProvideSavedSettings settingsProvider, IServiceProvider serviceProvider)
         {
-            Server = settingsProvider.PerforceServer;
-            User = settingsProvider.PerforceUser;
-            UseP4Config = settingsProvider.UseP4Config == null ? true : settingsProvider.UseP4Config.Value;
-            Workspace = settingsProvider.PerforceWorkspace;
-
             _settingsManager = new ShellSettingsManager(serviceProvider);
         }
 
@@ -70,27 +65,14 @@ namespace BruSoft.VS2P4
         /// <param name="settingsProvider"></param>
         private void LoadPersisted(ProvideSavedSettings settingsProvider)
         {
-            var passwordId = OptionName.OptionNameForLoad(OptionName.SettingIds.Password);
-            Password = settingsProvider.GetVariableExists(passwordId) ? (string)settingsProvider[OptionName.SettingIds.Password] : defaultPassword;
-            var logLevelId = OptionName.OptionNameForLoad(OptionName.SettingIds.LogLevel);
-            if (settingsProvider.GetVariableExists(logLevelId))
-            {
-                string level = (string)settingsProvider[OptionName.SettingIds.LogLevel];
-                try
-                {
-                    LogLevel = (Log.Level)Enum.Parse(typeof(Log.Level), level);
-                }
-                catch (Exception)
-                {
-                    LogLevel = defaultLogLevel;
-                }
-            }
-            else
-            {
-                LogLevel = defaultLogLevel;
-            }
-
             var store = _settingsManager.GetReadOnlySettingsStore(SettingsScope.UserSettings);
+
+            UseP4Config = LoadBoolean(OptionName.SettingIds.UseP4Config, store, defaultCommandsEnabled);
+            Server = LoadString(OptionName.SettingIds.Server, store, string.Empty);
+            User = LoadString(OptionName.SettingIds.User, store, string.Empty);
+            Password = LoadString(OptionName.SettingIds.Password, store, defaultPassword);
+            Workspace = LoadString(OptionName.SettingIds.Workspace, store, string.Empty);
+            LogLevel = (Log.Level)Enum.Parse(typeof(Log.Level), LoadString(OptionName.SettingIds.LogLevel, store, defaultLogLevel.ToString()));
 
             IsCheckoutEnabled = LoadBoolean(OptionName.SettingIds.IsCheckoutEnabled, store, defaultCommandsEnabled);
             IsAddEnabled = LoadBoolean(OptionName.SettingIds.IsAddEnabled, store, defaultCommandsEnabled);
@@ -115,6 +97,11 @@ namespace BruSoft.VS2P4
             }
         }
 
+        private static string LoadString(OptionName.SettingIds name, SettingsStore settingsStore, string defaultValue)
+        {
+            return settingsStore.GetString(defaultCollectionPath, name.ToString(), defaultValue);
+        }
+
         private static bool LoadBoolean(OptionName.SettingIds name, SettingsStore settingsStore, bool defaultValue)
         {
             return settingsStore.GetBoolean(defaultCollectionPath, name.ToString(), defaultValue);
@@ -133,11 +120,12 @@ namespace BruSoft.VS2P4
             var store = _settingsManager.GetWritableSettingsStore(SettingsScope.UserSettings);
 
             SaveBoolean(OptionName.SettingIds.UseP4Config, UseP4Config, store);
-            Save(OptionName.SettingIds.Server, Server, settingsProvider);
-            Save(OptionName.SettingIds.User, User, settingsProvider);
-            Save(OptionName.SettingIds.Password, Password, settingsProvider);
-            Save(OptionName.SettingIds.Workspace, Workspace, settingsProvider);
-            Save(OptionName.SettingIds.LogLevel, LogLevel.ToString(), settingsProvider);
+            SaveString(OptionName.SettingIds.Server, Server, store);
+            SaveString(OptionName.SettingIds.User, User, store);
+            SaveString(OptionName.SettingIds.Password, Password, store);
+            SaveString(OptionName.SettingIds.Workspace, Workspace, store);
+            SaveString(OptionName.SettingIds.LogLevel, LogLevel.ToString(), store);
+
             SaveBoolean(OptionName.SettingIds.IsCheckoutEnabled, IsCheckoutEnabled, store);
             SaveBoolean(OptionName.SettingIds.IsAddEnabled, IsAddEnabled, store);
             SaveBoolean(OptionName.SettingIds.IsRevertIfUnchangedEnabled, IsRevertIfUnchangedEnabled, store);
@@ -155,18 +143,13 @@ namespace BruSoft.VS2P4
             SaveBoolean(OptionName.SettingIds.Version180OrAfter, true, store);
         }
 
-        private static void Save(OptionName.SettingIds name, string variableValue, ProvideSavedSettings settingsProvider)
+        private static void SaveString(OptionName.SettingIds name, string variableValue, WritableSettingsStore settingsStore)
         {
-            var variableName = OptionName.OptionNameForSave(name);
-            if (settingsProvider.GetVariableExists(variableName))
+            if (!settingsStore.CollectionExists(defaultCollectionPath))
             {
-                settingsProvider[name] = variableValue;
+                settingsStore.CreateCollection(defaultCollectionPath);
             }
-            else
-            {
-                settingsProvider[name] = variableValue;
-                settingsProvider.SetVariablePersists(variableName, true);
-            }
+            settingsStore.SetString(defaultCollectionPath, name.ToString(), variableValue);
         }
 
         private static void SaveBoolean(OptionName.SettingIds name, bool variableValue, WritableSettingsStore settingsStore)

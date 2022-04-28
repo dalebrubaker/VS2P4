@@ -26,17 +26,19 @@ namespace BruSoft.VS2P4
         private Perforce.P4.ServerAddress _p4ServerAddress = null;
         private Perforce.P4.Server _p4Server = null;
         private Perforce.P4.Repository _p4Repository = null;
-        //private string _password = null;
+        private string _swarmURL = null;
 
         public bool IsConnected { get; set; }
 
         private readonly object _statesLock = new object();
 
-        private string Server { get { return _p4Repository.Connection.Server.Address.ToString(); } }
+        public string Server { get { return _p4Repository.Connection.Server.Address.ToString(); } }
 
-        private string User { get { return _p4Repository.Connection.UserName; } }
+        public string User { get { return _p4Repository.Connection.UserName; } }
 
-        private string Workspace { get { return _p4Repository.Connection.Client.Name; } }
+        public string Workspace { get { return _p4Repository.Connection.Client.Name; } }
+
+        public string SwarmURL { get { return _swarmURL; } }
 
         public P4Service(string server, string user, string password, string workspace, bool useP4Config, string path, Map map)
         {
@@ -128,6 +130,17 @@ namespace BruSoft.VS2P4
 
             var root = _p4Repository.Connection.Client.Root;
             _map.SetRoot(root);
+
+            string message = string.Empty;
+            Perforce.P4.P4CommandResult resultSet = null;
+            if (SendCommand("property", out message, out resultSet, "-l") && resultSet.Success)
+            {
+                var swarmInfo = resultSet.TaggedOutput.FirstOrDefault(s => s.ContainsKey("name") && s["name"] == "P4.Swarm.URL");
+                if (swarmInfo != null)
+                {
+                    _swarmURL = swarmInfo["value"];
+                }
+            }
         }
 
         /// <summary>

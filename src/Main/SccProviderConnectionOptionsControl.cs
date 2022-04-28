@@ -288,18 +288,27 @@ namespace BruSoft.VS2P4
             }
             finally
             {
-                p4Service.Disconnect();
-                p4Service.Dispose();
                 if (isSuccessful)
                 {
                     var msg = Resources.CONNECTION_SUCCEEDED;
                     if (_sccProviderService != null && _sccProviderService.Map != null)
                     {
                         var root = _sccProviderService.Map.Root;
+                        if (_useP4Config.Checked)
+                        {
+                            msg += "\n";
+                            msg += "\nUsing P4Config:";
+                            msg += "\n - Server: " + p4Service.Server;
+                            msg += "\n - Workspace: " + p4Service.Workspace;
+                            msg += "\n - User: " + p4Service.User;
+                            msg += "\n";
+                        }
                         msg += "\nPerforce root is " + root;
                     }
-                    MessageBox.Show(msg);
+                    MessageBox.Show(msg, Resources.CONNECTION_SUCCEEDED, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                p4Service.Disconnect();
+                p4Service.Dispose();
             }
         }
 
