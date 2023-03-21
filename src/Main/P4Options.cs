@@ -72,7 +72,14 @@ namespace BruSoft.VS2P4
             User = LoadString(OptionName.SettingIds.User, store, string.Empty);
             Password = LoadString(OptionName.SettingIds.Password, store, defaultPassword);
             Workspace = LoadString(OptionName.SettingIds.Workspace, store, string.Empty);
-            LogLevel = (Log.Level)Enum.Parse(typeof(Log.Level), LoadString(OptionName.SettingIds.LogLevel, store, defaultLogLevel.ToString()));
+            try
+            {
+                LogLevel = (Log.Level)Enum.Parse(typeof(Log.Level), LoadString(OptionName.SettingIds.LogLevel, store, defaultLogLevel.ToString()));
+            }
+            catch (ArgumentException)
+            {
+                LogLevel = defaultLogLevel;
+            }
 
             IsCheckoutEnabled = LoadBoolean(OptionName.SettingIds.IsCheckoutEnabled, store, defaultCommandsEnabled);
             IsAddEnabled = LoadBoolean(OptionName.SettingIds.IsAddEnabled, store, defaultCommandsEnabled);
