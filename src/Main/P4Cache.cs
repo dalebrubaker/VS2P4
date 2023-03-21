@@ -154,14 +154,6 @@ namespace BruSoft.VS2P4
         {
            get
             {
-#if DEBUG
-               var keys = new string[_fileStates.Count];
-               _fileStates.Keys.CopyTo(keys, 0);
-
-                var states = new FileState[_fileStates.Count];
-               _fileStates.Values.CopyTo(states, 0);
-#endif
-
                if (_fileStates.ContainsKey(fileName))
                 {
                     return _fileStates[fileName];
@@ -274,16 +266,24 @@ namespace BruSoft.VS2P4
                 return;
             }
 
-            IList<string> fileNames = vsSelection.FileNamesUnPiped;
             try
             {
-                Log.Information(string.Format("Starting to set file states for {0} files on background thread", fileNames.Count));
-                var sw = new Stopwatch();
-                sw.Start();
-                SetFileStates(fileNames);
-                Log.Information(string.Format("Finished setting file states on background thread for {0} files, took {1} msec", fileNames.Count, sw.ElapsedMilliseconds));
-                sw.Stop();
+                int fileCount = vsSelection.FileNames.Count;
+                Log.Information(string.Format("Starting to set file states for {0} files on background thread", fileCount));
 
+                const int stepSize = 5000;
+                var sw = new Stopwatch();
+                for (int i = 0; i < vsSelection.FileNames.Count; i += stepSize)
+                {
+                    var chunk = vsSelection.GetSection(i, i + stepSize);
+
+                    IList<string> fileNames = chunk.FileNamesUnPiped;
+                    var end = Math.Min(i + stepSize, fileCount);
+                    sw.Restart();
+                    SetFileStates(fileNames);
+                    sw.Stop();
+                    Log.Information(string.Format("Finished setting file states on background thread for {0}/{1} files, took {2} msec", end, fileCount, sw.ElapsedMilliseconds));
+                }
                 // When finished, throw an event that can tell the caller to tell VS to look for new glyphs for every file.
                 // But first reset the "is updating" flag so that the recipient can take advantage of the states already
                 // being in the cache.

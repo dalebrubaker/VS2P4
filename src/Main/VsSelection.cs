@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace BruSoft.VS2P4
@@ -61,6 +62,17 @@ namespace BruSoft.VS2P4
                 }
                 return result;
             }
+        }
+
+        public VsSelection GetSection(int start, int end)
+        {
+            var result = new VsSelection(new List<string>(end - start), Nodes.ToList());
+            end = System.Math.Min(end, FileNames.Count);
+            for (int i = start; i < end; i++)
+            {
+                result.FileNames.Add(FileNames[i]);
+            }
+            return result;
         }
     }
 }

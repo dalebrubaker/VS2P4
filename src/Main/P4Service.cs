@@ -235,9 +235,22 @@ namespace BruSoft.VS2P4
                 
                 recordSet = cmd.Run(opts);
             }
+            catch (Perforce.P4.P4Exception ex)
+            {
+                message = string.Empty;
+                do
+                {
+                    message += ex.Message.Trim() + "\n";
+                    ex = ex.NextError;
+                } while (ex != null);
+
+                Log.Error(String.Format("P4Service.SendCommand() P4Exception: {0}", message.Trim()));
+                recordSet = null;
+                return false;
+            }
             catch (Exception ex)
             {
-                Log.Error(String.Format("P4Service.SendCommand() Exception: {0}", ex.Message));
+                Log.Error(String.Format("P4Service.SendCommand() Exception: {0}", ex.Message.Trim()));
                 message = ex.Message;
                 recordSet = null;
                 return false;
@@ -251,15 +264,15 @@ namespace BruSoft.VS2P4
                     if (error.SeverityLevel >= Perforce.P4.ErrorSeverity.E_FAILED)
                     {
                         errors.Add(error.ErrorMessage);
-                        Log.Error(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage));
+                        Log.Error(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage.Trim()));
                     }
                     else if (error.SeverityLevel == Perforce.P4.ErrorSeverity.E_WARN)
                     {
-                        Log.Warning(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage));
+                        Log.Warning(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage.Trim()));
                     }
                     else if (error.SeverityLevel == Perforce.P4.ErrorSeverity.E_INFO)
                     {
-                        Log.Information(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage));
+                        Log.Information(String.Format("P4Service.SendCommand(): {0} {1}", error.ErrorCode, error.ErrorMessage.Trim()));
                     }
                 }
                 if (errors.Count > 1)
@@ -655,13 +668,32 @@ namespace BruSoft.VS2P4
             }
             Perforce.P4.P4CommandResult recordSet = null;
             string message;
-            bool result = SendCommand("fstat", out message, out recordSet, p4FileNames.ToArray());
+            bool result = SendCommand("fstat", out message, out recordSet, p4FileNames.Select(s => EscapeFilename(s)).ToArray());
 
             if (!result)
             {
-                 //Some kind of error. Try to do each file individually so the error doesn't reflect on EVERY file
-                AddStateForEachFile(filesUnderPerforceRoot, states);
-                return;
+                // Some kind of error; go through all files and see if they're mentioned in the error - if so, remove and re-send
+                var retryFileNames = new List<string>();
+                foreach (var filename in p4FileNames)
+                {
+                    if (message.Contains(filename))
+                    {
+                        states[filename] = FileState.NotInPerforce;
+                    }
+                    else
+                    {
+                        retryFileNames.Add(filename);
+                    }
+                }
+                result = SendCommand("fstat", out message, out recordSet, retryFileNames.Select(s => EscapeFilename(s)).ToArray());
+                if (!result)
+                {
+                    // If we're still getting an error, bruteforce it
+                    // TODO: binary search it
+                    Log.Warning(string.Format("fstat returned errors on the second try, brute-forcing each file individually!"));
+                    AddStateForEachFile(filesUnderPerforceRoot, states);
+                    return;
+                }
             }
 
             if (recordSet.TaggedOutput.Count <= 0)
@@ -927,7 +959,20 @@ namespace BruSoft.VS2P4
             return true;
         }
 
-
-
+        /// <summary>
+        /// Escape the restricted characters for Perforce
+        /// </summary>
+        /// <see cref="https://www.perforce.com/manuals/p4guide/Content/P4Guide/syntax.syntax.restrictions.html"/>
+        /// <remarks>This should probably be used at a lot more places...</remarks>
+        /// <param name="filename">Filename to be escaped</param>
+        /// <returns>Escaped filename</returns>
+        public static string EscapeFilename(string filename)
+        {
+            filename = filename.Replace("%", "%25");
+            filename = filename.Replace("@", "%40");
+            filename = filename.Replace("#", "%23");
+            filename = filename.Replace("*", "%2A");
+            return filename;
+        }
     }
 }
