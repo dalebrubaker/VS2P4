@@ -86,6 +86,10 @@
       <!--<Group guid="guidVS2P4CmdSet" id="igrpToolWindowToolbarGroup" priority="0x0100">
         <Parent guid="guidVS2P4CmdSet" id="imnuToolWindowToolbarMenu"/>
       </Group>-->
+      <!-- 	Group for right click context menu buttons -->
+      <Group guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_EZDOCWINTAB" />
+      </Group>
     </Groups>
     
     <!--Buttons section. -->
@@ -244,92 +248,125 @@
     <!--A better approach though is to use one of the existing groups created for source control commands, -->
     <!--like IDG_VS_CTXT_ITEM_SCC, IDG_VS_CTXT_PROJECT_SCC, IDG_VS_CTXT_SOLUTION_SCC. -->
 
-    <!--Place the source control commands defined in context menu for Solution Explorer also under File/SourceControl menu -->
+    <!--Solution explorer context menu: Items (files)-->
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
     </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
+    </CommandPlacement>
+      
+    <!--Solution explorer context menu: Projects-->
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
     </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
+    </CommandPlacement>
+      
+    <!--Solution explorer context menu: Solutions-->
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
       <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
     </CommandPlacement>
     <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_SCC" />
-    </CommandPlacement>
-    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
-      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_SCC" />l
     </CommandPlacement>
 
-    <!-- Also place the scc commands in the toolbar -->
+    <!-- Toolbar -->
     <CommandPlacement guid="guidVS2P4CmdSet" id="igrpSourceControlCommands" priority="0x0000">
       <Parent guid="guidVS2P4CmdSet" id="itbrSccToolbar" />
+    </CommandPlacement>
+
+    <!-- Document tab context menu -->
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdCheckout" priority="0x0000">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdMarkForAdd" priority="0x0001">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevertIfUnchanged" priority="0x0002">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevert" priority="0x0003">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdGetLatestRevison" priority="0x0004">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRevisionHistory" priority="0x0005">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdDiff" priority="0x0006">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdTimeLapse" priority="0x0007">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidVS2P4CmdSet" id="icmdRefresh" priority="0x0008">
+      <Parent guid="guidVS2P4CmdSet" id="igrpDocumentContextMenu" />
     </CommandPlacement>
   </CommandPlacements>
 
@@ -363,6 +400,8 @@
       <IDSymbol name="igrpToolWindowToolbarGroup" value="0x303"/>-->
       <IDSymbol name="igrpSccNowhere" value="0x304" />
       <IDSymbol name="itbrSccToolbar" value="0x400" />
+        
+      <IDSymbol name="igrpDocumentContextMenu" value="0x500" />
     
     </GuidSymbol>
 
