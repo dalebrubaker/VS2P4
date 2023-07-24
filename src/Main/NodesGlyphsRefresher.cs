@@ -24,19 +24,11 @@ namespace BruSoft.VS2P4
 
         public void Refresh()
         {
-            ThreadHelper threadHelper = ThreadHelper.Generic;
-            try
+            ThreadHelper.JoinableTaskFactory.Run(async delegate
             {
-                //threadHelper.Invoke(_sccProvider.RefreshSolutionGlyphs);
-                threadHelper.Invoke(RefreshSelectedNodes);
-            }
-            catch (NullReferenceException)
-            {
-                // This happens during unit testing.
-                //_sccProvider.RefreshSolutionGlyphs();
-                Log.Error("NodesGlyphsRefresher.Refresh:  NullReferenceException");
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 RefreshSelectedNodes();
-            }
+            });
         }
 
         private void RefreshSelectedNodes()
