@@ -876,6 +876,11 @@ namespace BruSoft.VS2P4.UnitTests
             target.Options.IsViewTimeLapseEnabled = true;
             VerifyCommandStatus(OLECMDF.OLECMDF_SUPPORTED, cmdTimeLapse);
 
+            target.Options.IsOpenInSwarmEnabled = false;
+            VerifyCommandStatus(OLECMDF.OLECMDF_SUPPORTED | OLECMDF.OLECMDF_INVISIBLE, cmdOpenInSwarm);
+            target.Options.IsOpenInSwarmEnabled = true;
+            VerifyCommandStatus(OLECMDF.OLECMDF_SUPPORTED, cmdOpenInSwarm);
+
             //VerifyCommandStatus(OLECMDF.OLECMDF_SUPPORTED | OLECMDF.OLECMDF_ENABLED, cmdViewToolWindow);
             //VerifyCommandStatus(OLECMDF.OLECMDF_SUPPORTED | OLECMDF.OLECMDF_ENABLED, cmdToolWindowToolbarCommand);
 

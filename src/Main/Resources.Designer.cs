@@ -639,6 +639,16 @@ namespace BruSoft.VS2P4 {
                 return ResourceManager.GetString("View_Time_Lapse_Report", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to View_OpenInSwarm_Report.
+        /// </summary>
+        internal static string View_OpenInSwarm_Report
+        {
+            get {
+                return ResourceManager.GetString("View_OpenInSwarm_Report", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to VS2P4 Options.

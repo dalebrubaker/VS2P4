@@ -2034,6 +2034,51 @@ namespace BruSoft.VS2P4
         }
 
         /// <summary>
+        /// Is the P4 Server connected to a Swarm instance?
+        /// </summary>
+        public bool IsSwarmConnected { get { return string.IsNullOrEmpty(_p4Service.SwarmURL); } }
+
+        /// <summary>
+        /// Open file selection's Swarm URLs in browser
+        /// </summary>
+        public bool OpenInSwarm(VsSelection vsSelection)
+        {
+            try
+            {
+                if (!_p4Service.IsConnected)
+                {
+                    _p4Service.Connect();
+                }
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            catch (Perforce.P4.P4Exception)
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(_p4Service.SwarmURL))
+            {
+                return false;
+            }
+
+            foreach (string fileName in vsSelection.FileNames)
+            {
+                string warning;
+                var p4Filename = _map.GetP4FileName(fileName, out warning).TrimStart(new char[] { '/' });
+                var url = _p4Service.SwarmURL + "/files/" + p4Filename;
+                if (!string.IsNullOrEmpty(warning))
+                {
+                    Log.Warning("Map.GetP4FileName: " + warning);
+                }
+                Process.Start("explorer", url);
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Get Latest Revision for the specified files 
         /// </summary>
         /// <param name="selection">the selected file names and nodes.</param>

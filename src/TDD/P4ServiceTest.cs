@@ -163,7 +163,7 @@ namespace BruSoft.VS2P4.UnitTests
             {
                 _map = new Map(false);
             }
-            _map.GetP4FileName(filePath, out warning);
+            _map.GetLocalFileName(filePath, out warning);
             Assert.IsTrue(String.IsNullOrEmpty(warning), warning);
 
             return filePath;

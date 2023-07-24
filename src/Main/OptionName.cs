@@ -48,6 +48,7 @@ namespace BruSoft.VS2P4
             AutoDelete,
             IgnoreFilesNotUnderP4Root2,
             Version180OrAfter,
+            IsOpenInSwarmEnabled,
         }
 
         private static string Prefix

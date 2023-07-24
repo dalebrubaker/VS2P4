@@ -33,6 +33,7 @@ namespace BruSoft.VS2P4
         public const int icmdDiff = 0x106;
         public const int icmdTimeLapse = 0x107;
         public const int icmdRefresh = 0x108;
+        public const int icmdOpenInSwarm = 0x109;
 
         //public const int icmdViewToolWindow = 0x108;
         //public const int icmdToolWindowToolbarCommand   = 0x109;

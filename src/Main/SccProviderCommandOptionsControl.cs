@@ -42,6 +42,7 @@ namespace BruSoft.VS2P4
                 _isRevisionHistoryEnabled.Checked = sccProviderService.Options.IsViewRevisionHistoryEnabled;
                 _isDiffEnabled.Checked = sccProviderService.Options.IsViewDiffEnabled;
                 _isTimeLapseEnabled.Checked = sccProviderService.Options.IsViewTimeLapseEnabled;
+                _isOpenInSwarmEnabled.Checked = sccProviderService.Options.IsOpenInSwarmEnabled;
                 _autoCheckoutOnEdit.Checked = sccProviderService.Options.AutoCheckoutOnEdit;
                 _autoCheckoutOnSave.Checked = sccProviderService.Options.AutoCheckoutOnSave;
                 _autoAdd.Checked = sccProviderService.Options.AutoAdd;
@@ -83,6 +84,7 @@ namespace BruSoft.VS2P4
                 p4Options.IsViewRevisionHistoryEnabled = _isRevisionHistoryEnabled.Checked;
                 p4Options.IsViewDiffEnabled = _isDiffEnabled.Checked;
                 p4Options.IsViewTimeLapseEnabled = _isTimeLapseEnabled.Checked;
+                p4Options.IsOpenInSwarmEnabled = _isOpenInSwarmEnabled.Checked;
                 p4Options.AutoCheckoutOnEdit = _autoCheckoutOnEdit.Checked;
                 p4Options.AutoCheckoutOnSave = _autoCheckoutOnSave.Checked;
                 p4Options.AutoAdd = _autoAdd.Checked;

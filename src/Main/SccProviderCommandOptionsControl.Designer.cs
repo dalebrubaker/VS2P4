@@ -39,6 +39,7 @@
             this._isRevisionHistoryEnabled = new System.Windows.Forms.CheckBox();
             this._isDiffEnabled = new System.Windows.Forms.CheckBox();
             this._isTimeLapseEnabled = new System.Windows.Forms.CheckBox();
+            this._isOpenInSwarmEnabled = new System.Windows.Forms.CheckBox();
             this._autoCheckoutOnEdit = new System.Windows.Forms.CheckBox();
             this._autoCheckoutOnSave = new System.Windows.Forms.CheckBox();
             this._autoAdd = new System.Windows.Forms.CheckBox();
@@ -61,9 +62,10 @@
             this.groupBoxCommandsEnabled.Controls.Add(this._isRevisionHistoryEnabled);
             this.groupBoxCommandsEnabled.Controls.Add(this._isDiffEnabled);
             this.groupBoxCommandsEnabled.Controls.Add(this._isTimeLapseEnabled);
+            this.groupBoxCommandsEnabled.Controls.Add(this._isOpenInSwarmEnabled);
             this.groupBoxCommandsEnabled.Location = new System.Drawing.Point(7, 18);
             this.groupBoxCommandsEnabled.Name = "groupBoxCommandsEnabled";
-            this.groupBoxCommandsEnabled.Size = new System.Drawing.Size(153, 230);
+            this.groupBoxCommandsEnabled.Size = new System.Drawing.Size(153, 254);
             this.groupBoxCommandsEnabled.TabIndex = 3;
             this.groupBoxCommandsEnabled.TabStop = false;
             this.groupBoxCommandsEnabled.Text = "Commands Enabled";
@@ -185,6 +187,19 @@
             this._isTimeLapseEnabled.Text = "View Time-lapse";
             this._isTimeLapseEnabled.UseVisualStyleBackColor = true;
             // 
+            // _isOpenInSwarmEnabled
+            // 
+            this._isOpenInSwarmEnabled.AutoSize = true;
+            this._isOpenInSwarmEnabled.Checked = true;
+            this._isOpenInSwarmEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._isOpenInSwarmEnabled.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this._isOpenInSwarmEnabled.Location = new System.Drawing.Point(11, 227);
+            this._isOpenInSwarmEnabled.Name = "_isOpenInSwarmEnabled";
+            this._isOpenInSwarmEnabled.Size = new System.Drawing.Size(98, 17);
+            this._isOpenInSwarmEnabled.TabIndex = 8;
+            this._isOpenInSwarmEnabled.Text = "Open in Swarm";
+            this._isOpenInSwarmEnabled.UseVisualStyleBackColor = true;
+            // 
             // _autoCheckoutOnEdit
             // 
             this._autoCheckoutOnEdit.AutoSize = true;
@@ -246,7 +261,7 @@
             this.groupBoxBehaviors.Controls.Add(this._autoCheckoutOnEdit);
             this.groupBoxBehaviors.Location = new System.Drawing.Point(165, 18);
             this.groupBoxBehaviors.Name = "groupBoxBehaviors";
-            this.groupBoxBehaviors.Size = new System.Drawing.Size(223, 230);
+            this.groupBoxBehaviors.Size = new System.Drawing.Size(223, 254);
             this.groupBoxBehaviors.TabIndex = 4;
             this.groupBoxBehaviors.TabStop = false;
             this.groupBoxBehaviors.Text = "Behaviors";
@@ -271,7 +286,7 @@
             this.Controls.Add(this.groupBoxBehaviors);
             this.Controls.Add(this.groupBoxCommandsEnabled);
             this.Name = "SccProviderCommandOptionsControl";
-            this.Size = new System.Drawing.Size(407, 271);
+            this.Size = new System.Drawing.Size(407, 295);
             this.groupBoxCommandsEnabled.ResumeLayout(false);
             this.groupBoxCommandsEnabled.PerformLayout();
             this.groupBoxBehaviors.ResumeLayout(false);
@@ -292,6 +307,7 @@
         private System.Windows.Forms.CheckBox _isRevisionHistoryEnabled;
         private System.Windows.Forms.CheckBox _isDiffEnabled;
         private System.Windows.Forms.CheckBox _isTimeLapseEnabled;
+        private System.Windows.Forms.CheckBox _isOpenInSwarmEnabled;
         private System.Windows.Forms.CheckBox _autoCheckoutOnEdit;
         private System.Windows.Forms.CheckBox _autoCheckoutOnSave;
         private System.Windows.Forms.CheckBox _autoAdd;

@@ -33,6 +33,7 @@ namespace BruSoft.VS2P4
         public bool IsViewRevisionHistoryEnabled { get; set; }
         public bool IsViewDiffEnabled { get; set; }
         public bool IsViewTimeLapseEnabled { get; set; }
+        public bool IsOpenInSwarmEnabled { get; set; }
         public bool AutoCheckoutOnEdit { get; set; }
         public bool AutoCheckoutOnSave { get; set; }
         public bool AutoAdd { get; set; }
@@ -90,6 +91,7 @@ namespace BruSoft.VS2P4
             IsViewRevisionHistoryEnabled = LoadBoolean(OptionName.SettingIds.IsViewRevisionHistoryEnabled, store, defaultCommandsEnabled);
             IsViewDiffEnabled = LoadBoolean(OptionName.SettingIds.IsViewDiffEnabled, store, defaultCommandsEnabled);
             IsViewTimeLapseEnabled = LoadBoolean(OptionName.SettingIds.IsViewTimeLapseEnabled, store, defaultCommandsEnabled);
+            IsOpenInSwarmEnabled = LoadBoolean(OptionName.SettingIds.IsOpenInSwarmEnabled, store, defaultCommandsEnabled);
             AutoCheckoutOnEdit = LoadBoolean(OptionName.SettingIds.AutoCheckoutOnEdit, store, defaultCommandsEnabled);
             AutoCheckoutOnSave = LoadBoolean(OptionName.SettingIds.AutoCheckoutOnSave, store, defaultCommandsEnabled);
             AutoAdd = LoadBoolean(OptionName.SettingIds.AutoAdd, store, defaultCommandsEnabled);
@@ -142,6 +144,7 @@ namespace BruSoft.VS2P4
             SaveBoolean(OptionName.SettingIds.IsViewRevisionHistoryEnabled, IsViewRevisionHistoryEnabled, store);
             SaveBoolean(OptionName.SettingIds.IsViewDiffEnabled, IsViewDiffEnabled, store);
             SaveBoolean(OptionName.SettingIds.IsViewTimeLapseEnabled, IsViewTimeLapseEnabled, store);
+            SaveBoolean(OptionName.SettingIds.IsOpenInSwarmEnabled, IsOpenInSwarmEnabled, store);
             SaveBoolean(OptionName.SettingIds.AutoCheckoutOnEdit, AutoCheckoutOnEdit, store);
             SaveBoolean(OptionName.SettingIds.AutoCheckoutOnSave, AutoCheckoutOnSave, store);
             SaveBoolean(OptionName.SettingIds.AutoAdd, AutoAdd, store);

@@ -166,6 +166,10 @@ namespace BruSoft.VS2P4
                 menuCmd = new MenuCommand(new EventHandler(Exec_icmdRefresh), cmd);
                 mcs.AddCommand(menuCmd);
 
+                cmd = new CommandID(GuidList.guidVS2P4CmdSet, CommandId.icmdOpenInSwarm);
+                menuCmd = new MenuCommand(new EventHandler(Exec_icmdOpenInSwarm), cmd);
+                mcs.AddCommand(menuCmd);
+
             }
 
             // Register the provider with the source control manager
@@ -282,6 +286,10 @@ namespace BruSoft.VS2P4
 
                 case CommandId.icmdRefresh:
                     cmdf |= QueryStatus_icmdRefresh();
+                    break;
+
+                case CommandId.icmdOpenInSwarm:
+                    cmdf |= QueryStatus_icmdOpenInSwarm();
                     break;
 
                 default:
@@ -437,6 +445,20 @@ namespace BruSoft.VS2P4
             return OLECMDF.OLECMDF_ENABLED;
         }
 
+        OLECMDF QueryStatus_icmdOpenInSwarm()
+        {
+            if (!_sccService.IsSolutionLoaded)
+            {
+                return OLECMDF.OLECMDF_INVISIBLE;
+            }
+            if (!_sccService.Options.IsOpenInSwarmEnabled)
+            {
+                return OLECMDF.OLECMDF_INVISIBLE;
+            }
+
+            return OLECMDF.OLECMDF_ENABLED;
+        }
+
         #endregion
 
         #region Source Control Commands Execution
@@ -530,6 +552,11 @@ namespace BruSoft.VS2P4
             }
 
             _sccService.Refresh(null);
+        }
+
+        private void Exec_icmdOpenInSwarm(object sender, EventArgs e)
+        {
+            ExecuteCommand(_sccService.Options.IsOpenInSwarmEnabled, Resources.View_OpenInSwarm_Report, _sccService.OpenInSwarm);
         }
 
         #endregion

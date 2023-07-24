@@ -130,6 +130,7 @@ namespace BruSoft.VS2P4
 
             var root = _p4Repository.Connection.Client.Root;
             _map.SetRoot(root);
+            _map.Stream = _p4Repository.Connection.Client.Stream;
 
             string message = string.Empty;
             Perforce.P4.P4CommandResult resultSet = null;
@@ -174,7 +175,7 @@ namespace BruSoft.VS2P4
         {
             // This is a new file, so add it to the map.
             string warning;
-            string p4FileName = _map.GetP4FileName(vsFileName, out warning);
+            string p4FileName = _map.GetLocalFileName(vsFileName, out warning);
             return SendCommand("add", vsFileName, out message);
         }
 
@@ -207,7 +208,7 @@ namespace BruSoft.VS2P4
         private string GetP4FileName(string vsFileName)
         {
             string warning;
-            string result = _map.GetP4FileName(vsFileName, out warning);
+            string result = _map.GetLocalFileName(vsFileName, out warning);
             if (!string.IsNullOrEmpty(warning))
             {
                 Log.Warning(warning);
@@ -619,7 +620,7 @@ namespace BruSoft.VS2P4
                 {
                     // Do GetP4FileName() just so we can set _isFileNameUnderRoot[]
                     string warning;
-                    string p4FileName = _map.GetP4FileName(vsFileName, out warning);
+                    string p4FileName = _map.GetLocalFileName(vsFileName, out warning);
                     if (!string.IsNullOrEmpty(warning))
                     {
                         warningsSb.Append(warning);
@@ -915,7 +916,7 @@ namespace BruSoft.VS2P4
         public bool RevisionHistory(string fileName)
         {
             string warning;
-            fileName = _map.GetP4FileName(fileName, out warning);
+            fileName = _map.GetLocalFileName(fileName, out warning);
             if (!string.IsNullOrEmpty(warning))
             {
                 Log.Warning(warning);
@@ -933,7 +934,7 @@ namespace BruSoft.VS2P4
         public bool Diff(string fileName)
         {
             string warning;
-            fileName = _map.GetP4FileName(fileName, out warning);
+            fileName = _map.GetLocalFileName(fileName, out warning);
             if (!string.IsNullOrEmpty(warning))
             {
                 Log.Warning(warning);
@@ -950,7 +951,7 @@ namespace BruSoft.VS2P4
         public bool TimeLapse(string fileName)
         {
             string warning;
-            fileName = _map.GetP4FileName(fileName, out warning);
+            fileName = _map.GetLocalFileName(fileName, out warning);
             if (!string.IsNullOrEmpty(warning))
             {
                 Log.Warning(warning);

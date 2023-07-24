@@ -27,6 +27,7 @@ namespace BruSoft.VS2P4
         /// The P4 fileName is a version that is under the root, if possible.
         /// We cache them here to avoid the overhead of continually looking for SUBST drive conversions
         /// </summary>
+        private readonly ConcurrentDictionary<string, string> _localFileNames = new ConcurrentDictionary<string, string>();
         private readonly ConcurrentDictionary<string, string> _p4FileNames = new ConcurrentDictionary<string, string>();
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace BruSoft.VS2P4
         private string _root;
 
         private string _rootDir;
+        private string _stream;
 
 
         /// <summary>
@@ -52,6 +54,11 @@ namespace BruSoft.VS2P4
             get { return _root; }
         }
 
+        public string Stream
+        {
+            get { return _stream; }
+            set { _stream = value; }
+        }
 
         public void SetRoot(string root)
         {
@@ -90,7 +97,7 @@ namespace BruSoft.VS2P4
                 {
                     msgRoot = string.Format("Perforce root has changed from {0} to {1}", oldRoot, _root);
                     _isFileNameUnderRoot.Clear();
-                    _p4FileNames.Clear();
+                    _localFileNames.Clear();
                 }
                 Log.Information(msgRoot);
             }
@@ -105,7 +112,7 @@ namespace BruSoft.VS2P4
         /// <param name="vsFileName"></param>
         /// <param name="warning"></param>
         /// <returns></returns>
-        public string GetP4FileName(string vsFileName, out string warning)
+        public string GetLocalFileName(string vsFileName, out string warning)
         {
             warning = "";
             if (string.IsNullOrEmpty(_root))
@@ -115,28 +122,36 @@ namespace BruSoft.VS2P4
                 return vsFileName;
             }
 
-            string p4FileName;
-            if (_p4FileNames.TryGetValue(vsFileName, out p4FileName))
+            string localFileName;
+            if (_localFileNames.TryGetValue(vsFileName, out localFileName))
             {
                 // Already cached, just use it.
-                return p4FileName;
+                return localFileName;
             }
 
             if (IsFileUnderRoot(vsFileName))
             {
-                p4FileName = vsFileName;
+                localFileName = vsFileName;
+                _localFileNames.TryAdd(vsFileName, localFileName);
+
+                var p4FileName = localFileName;
+                p4FileName = p4FileName.Replace(_rootDir, "");
+                p4FileName = p4FileName.Replace('\\', '/');
+                // TODO: should call P4Service.EscapeFilename here probably
+                p4FileName = Stream + p4FileName;
                 _p4FileNames.TryAdd(vsFileName, p4FileName);
+
                 _isFileNameUnderRoot.TryAdd(vsFileName, true);
-                return p4FileName;
+                return localFileName;
             }
 
             // One last try, checking if vsFileName is on a SUBST virtual drive
-            p4FileName = GetRealPath(vsFileName);
-            if (!IsFileUnderRoot(p4FileName))
+            localFileName = GetRealPath(vsFileName);
+            if (!IsFileUnderRoot(localFileName))
             {
                 _isFileNameUnderRoot.TryAdd(vsFileName, false);
                 warning = string.Format("File {0} is not under Perforce root ({1})", vsFileName, _root);
-                p4FileName = vsFileName;
+                localFileName = vsFileName;
             }
             else
             {
@@ -144,9 +159,30 @@ namespace BruSoft.VS2P4
             }
 
             // cache the p4FileName so we won't try again in the future.
-            _p4FileNames.TryAdd(vsFileName, p4FileName);
+            _localFileNames.TryAdd(vsFileName, localFileName);
 
-            return p4FileName;
+            return localFileName;
+        }
+
+        /// <summary>
+        /// Given a VS file name, return the fileName we want to use for Perforce.
+        /// Load _isFileNameUnderRoot also
+        /// </summary>
+        /// <param name="vsFileName"></param>
+        /// <param name="warning"></param>
+        /// <returns></returns>
+        public string GetP4FileName(string vsFileName, out string warning)
+        {
+            warning = "";
+
+            string p4FileName;
+            if (_p4FileNames.TryGetValue(vsFileName, out p4FileName))
+            {
+                // Already cached, just use it.
+                return p4FileName;
+            }
+
+            return GetLocalFileName(vsFileName, out warning);
         }
 
         /// <summary>
