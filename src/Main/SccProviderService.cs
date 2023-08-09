@@ -901,7 +901,7 @@ namespace BruSoft.VS2P4
                 // If an exception was caught, do not allow the edit
                 pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
                 prgfMoreInfo = (uint)tagVSQueryEditResultFlags.QER_EditNotPossible;
-                Log.Error("SccProviderService: QueryEditFiles: " + ex.Message);
+                Log.Error("SccProviderService: QueryEditFiles: " + ex.Message + "\n" + ex.StackTrace);
             }
 
             return VSConstants.S_OK;

@@ -594,9 +594,12 @@ namespace BruSoft.VS2P4
             var changeLists = _p4Repository.GetChangelists(opts);
 
             var output = new Dictionary<int, string>();
-            foreach (var changeList in changeLists)
+            if (changeLists != null)
             {
-                output.Add(changeList.Id, changeList.Description);
+                foreach (var changeList in changeLists)
+                {
+                    output.Add(changeList.Id, changeList.Description);
+                }
             }
             return output;
         }
