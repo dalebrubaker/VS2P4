@@ -761,6 +761,8 @@ namespace BruSoft.VS2P4.UnitTests
             cmdDiff[0].cmdID = CommandId.icmdDiff;
             OLECMD[] cmdTimeLapse = new OLECMD[1];
             cmdTimeLapse[0].cmdID = CommandId.icmdTimeLapse;
+            OLECMD[] cmdOpenInSwarm = new OLECMD[1];
+            cmdOpenInSwarm[0].cmdID = CommandId.icmdOpenInSwarm;
 
             //OLECMD[] cmdViewToolWindow = new OLECMD[1];
             //cmdViewToolWindow[0].cmdID = CommandId.icmdViewToolWindow;
