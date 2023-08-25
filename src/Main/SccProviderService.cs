@@ -155,7 +155,7 @@ namespace BruSoft.VS2P4
             if (VSConstants.VSCOOKIE_NIL != _tpdTrackProjectDocumentsCookie)
             {
                 var tpdService = (IVsTrackProjectDocuments2)_sccProvider.GetService(typeof(SVsTrackProjectDocuments));
-                tpdService.UnadviseTrackProjectDocumentsEvents(_tpdTrackProjectDocumentsCookie);
+                tpdService?.UnadviseTrackProjectDocumentsEvents(_tpdTrackProjectDocumentsCookie);
                 _tpdTrackProjectDocumentsCookie = VSConstants.VSCOOKIE_NIL;
             }
 
@@ -2257,6 +2257,10 @@ namespace BruSoft.VS2P4
 
             // Return success (If you don't want to have custom glyphs return VSConstants.E_NOTIMPL)
             return VSConstants.S_OK;
+        }
+        public int GetCustomGlyphList(uint BaseIndex, out IntPtr pdwImageListHandle)
+        {
+            return GetCustomGlyphList(BaseIndex, out pdwImageListHandle);
         }
 
         #endregion IVsSccGlyphs Members
