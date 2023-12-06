@@ -15,6 +15,7 @@ namespace BruSoft.VS2P4
         private readonly IList<VSITEMSELECTION> _nodes;
 
         private readonly VS2P4Package _sccProvider;
+        private bool _isRunning = false;
 
         public NodesGlyphsRefresher(IEnumerable<VSITEMSELECTION> nodes, VS2P4Package sccProvider)
         {
@@ -24,10 +25,15 @@ namespace BruSoft.VS2P4
 
         public void Refresh()
         {
+            if (_isRunning)
+            {
+                return;
+            }
+            _isRunning = true;
             ThreadHelper.JoinableTaskFactory.Run(async delegate
             {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 RefreshSelectedNodes();
+                _isRunning = false;
             });
         }
 
@@ -37,7 +43,7 @@ namespace BruSoft.VS2P4
             sw.Start();
             _sccProvider.RefreshNodesGlyphs(_nodes);
             sw.Stop();
-            Log.Debug(string.Format("{0} msec to refresh {1} nodes", sw.ElapsedMilliseconds, _nodes.Count));
+            Log.Information(string.Format("{0} msec to refresh {1} nodes", sw.ElapsedMilliseconds, _nodes.Count));
         }
     }
 }

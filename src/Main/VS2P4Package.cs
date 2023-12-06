@@ -660,7 +660,7 @@ namespace BruSoft.VS2P4
         /// Returns the selection
         /// </summary>
         /// <returns></returns>
-        private VsSelection GetSelection()
+        public VsSelection GetSelection()
         {
             IList<VSITEMSELECTION> selectedNodes = GetSelectedNodes();
 
@@ -866,6 +866,8 @@ namespace BruSoft.VS2P4
         public void RefreshNodesGlyphs(IList<VSITEMSELECTION> selectedNodes)
         {
             var map = new Dictionary<IVsSccProject2, GlyphsToUpdate>();
+            var rootUpdates = new Dictionary<IVsHierarchy, List<VsStateIcon>>();
+            uint n = 1;
             foreach (VSITEMSELECTION vsItemSel in selectedNodes)
             {
                 var sccProject2 = vsItemSel.pHier as IVsSccProject2;
@@ -886,9 +888,12 @@ namespace BruSoft.VS2P4
                         var rgdwSccStatus = new uint[1];
                         _sccService.GetSccGlyph(1, rgpszFullPaths, rgsiGlyphs, rgdwSccStatus);
 
-                        // Set the solution's glyph directly in the hierarchy
                         var solHier = (IVsHierarchy)GetService(typeof(SVsSolution));
-                        solHier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, rgsiGlyphs[0]);
+                        if (!rootUpdates.ContainsKey(solHier))
+                        {
+                            rootUpdates.Add(solHier, new List<VsStateIcon>());
+                        }
+                        rootUpdates[solHier].Add(rgsiGlyphs[0]);
                     }
                     else
                     {
@@ -904,7 +909,7 @@ namespace BruSoft.VS2P4
 
                         BuildUpdateInfo(map, vsItemSel, sccProject2);
                         sw.Stop();
-                        Log.Debug(string.Format("Done updating all glyphs for entire project (on UI thread) {0}, took {1} msec", projectFileName, sw.ElapsedMilliseconds));
+                        Log.Information(string.Format("Glyphs updated for project {0} ({1}/{2}), took {3} msec", projectFileName, n++, selectedNodes.Count, sw.ElapsedMilliseconds));
                     }
                 }
                 else
@@ -924,6 +929,19 @@ namespace BruSoft.VS2P4
                         glyphs.SccStatus.ToArray());
                 }
             }
+            // Set the solution's glyph directly in the hierarchy
+            ThreadHelper.JoinableTaskFactory.RunAsync(async delegate
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                foreach (var project in rootUpdates)
+                {
+                    foreach (var item in project.Value)
+                    {
+                        project.Key.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, item);
+                    }
+                }
+            }).FileAndForget("VS2P4Package::RefreshNodesGlyphs");
         }
 
         /// <summary>
@@ -971,7 +989,9 @@ namespace BruSoft.VS2P4
                 _sccService.GetSccGlyph(sccFiles.Count, rgpszFullPaths, rgsiGlyphs, rgdwSccStatus);
 
                 uint[] rguiAffectedNodes = new uint[sccFiles.Count];
+
                 IList<uint> subnodes = GetProjectItems(vsItemSel.pHier, vsItemSel.itemid);
+
                 if (subnodes.Count != sccFiles.Count)
                 {
                     //Log.Debug("RefreshNodeGlyphs: subnodes.Count != sccFiles.Count");

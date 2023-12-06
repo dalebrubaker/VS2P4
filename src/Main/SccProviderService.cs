@@ -40,11 +40,6 @@ namespace BruSoft.VS2P4
         // Also set by IsActive property for unit testing.
         private bool _isActive;
 
-        /// <summary>
-        /// Set true after refreshing the first project in a solution, so we can refresh collapsed projects as well on the first one.
-        /// </summary>
-        private bool _isAllProjectsRefreshed;
-
         // The service and source control provider
         private readonly VS2P4Package _sccProvider;
 
@@ -550,7 +545,6 @@ namespace BruSoft.VS2P4
             
             IsSolutionLoaded = false;
             _approvedForInMemoryEdit.Clear();
-            _isAllProjectsRefreshed = false;
             IsSolutionLoaded = false;
             IsFirstP4CacheUpdateComplete = false;
 
@@ -597,17 +591,8 @@ namespace BruSoft.VS2P4
             // If a project is added to the solution after the solution was opened, do Refresh to pick up file states for the added project
             if (_isActive && IsSolutionLoaded)
             {
-                if (_isAllProjectsRefreshed)
-                {
-                    Log.Information("After opening project, refreshing all project glyphs");
-                    Refresh(pHierarchy);
-                }
-                else
-                {
-                    Log.Information("Opening first project so refreshing all solution glyphs");
-                    Refresh(null);
-                    _isAllProjectsRefreshed = true;
-                }
+                Log.Information("After opening project, refreshing all project glyphs");
+                Refresh(pHierarchy);
             }
             else
             {
@@ -628,7 +613,6 @@ namespace BruSoft.VS2P4
         {
             var msg = string.Format("OnBeforeOpenSolution({0})", pszSolutionFilename);
             Log.Information(msg);
-            _isAllProjectsRefreshed = false;
             IsSolutionLoaded = false;
 
             return VSConstants.S_OK;
@@ -639,7 +623,6 @@ namespace BruSoft.VS2P4
             var solutionName = _sccProvider.GetSolutionFileName();
             var msg = string.Format("OnAfterOpenSolution({0})", solutionName);
             Log.Information(msg);
-            _isAllProjectsRefreshed = false;
             IsSolutionLoaded = false;
             IsFirstP4CacheUpdateComplete = false;
             if (_isActive)
@@ -822,7 +805,7 @@ namespace BruSoft.VS2P4
                 return VSConstants.S_OK;
             }
 
-            VsSelection vsSelectionToCheckOut = GetVsSelectionNoFileNamesAllNodes();
+            VsSelection vsSelectionToCheckOut = new VsSelection(new List<string>(), new List<VSITEMSELECTION>());// GetVsSelectionNoFileNamesAllNodes();
             int changelistNumber = CL_DEFAULT;
 
             try 
@@ -1231,7 +1214,7 @@ namespace BruSoft.VS2P4
         /// </summary>
         public int OnAfterAddFilesEx([InAttribute] int cProjects, [InAttribute] int cFiles, [InAttribute] IVsProject[] rgpProjects, [InAttribute] int[] rgFirstIndices, [InAttribute] string[] rgpszMkDocuments, [InAttribute] VSADDFILEFLAGS[] rgFlags)
         {
-            VsSelection vsSelection = GetVsSelectionNoFileNamesAllNodes();
+            VsSelection vsSelection = _sccProvider.GetSelection();
 
             // Start by iterating through all projects calling this function
             for (int iProject = 0; iProject < cProjects; iProject++)

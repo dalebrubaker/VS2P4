@@ -700,7 +700,7 @@ namespace BruSoft.VS2P4
                 }
             }
 
-            if (recordSet.TaggedOutput.Count <= 0)
+            if (recordSet.TaggedOutput == null || recordSet.TaggedOutput.Count <= 0)
             {
                 foreach (var vsFileName in filesUnderPerforceRoot)
                 {

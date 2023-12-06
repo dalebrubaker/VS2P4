@@ -81,6 +81,9 @@ namespace BruSoft.VS2P4
             {
                 LogLevel = defaultLogLevel;
             }
+#if DEBUG
+            LogLevel = Log.Level.Debug;
+#endif
 
             IsCheckoutEnabled = LoadBoolean(OptionName.SettingIds.IsCheckoutEnabled, store, defaultCommandsEnabled);
             IsAddEnabled = LoadBoolean(OptionName.SettingIds.IsAddEnabled, store, defaultCommandsEnabled);
