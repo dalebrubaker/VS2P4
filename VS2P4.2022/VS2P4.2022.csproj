@@ -93,110 +93,12 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DlgLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DlgLogin.designer.cs">
-      <DependentUpon>DlgLogin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Map.cs" />
-    <Compile Include="OptionName.cs" />
-    <Compile Include="P4OptionsDefaultsProvider.cs" />
-    <Compile Include="PersistedP4OptionSettings.cs" />
-    <Compile Include="ProvideSavedSettings.cs" />
-    <Compile Include="ProvideToolsOptionsPageOrder.cs" />
-    <Compile Include="SccProviderCommandOptions.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CommandId.cs" />
-    <Compile Include="CustomSccGlyphs.cs" />
-    <Compile Include="DataStreamFromComStream.cs" />
-    <Compile Include="DlgQueryEditCheckedInFile.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DlgQueryEditCheckedInFile.designer.cs">
-      <DependentUpon>DlgQueryEditCheckedInFile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DlgQuerySaveCheckedInFile.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DlgQuerySaveCheckedInFile.designer.cs">
-      <DependentUpon>DlgQuerySaveCheckedInFile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FileState.cs" />
-    <Compile Include="Guids.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="NodesGlyphsRefresher.cs" />
-    <Compile Include="P4Cache.cs" />
-    <Compile Include="P4CacheEventArgs.cs" />
-    <Compile Include="P4Options.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ProvideSolutionProps.cs" />
-    <Compile Include="ProvideSourceControlProvider.cs" />
-    <Compile Include="ProvideToolsOptionsPageVisibility.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="SccProviderCommandOptionsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SccProviderCommandOptionsControl.Designer.cs">
-      <DependentUpon>SccProviderCommandOptionsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SccProviderConnectionOptions.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SccProviderConnectionOptionsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="P4Service.cs" />
-    <Compile Include="SccProviderService.cs" />
-    <Compile Include="UserSettings.cs" />
-    <Compile Include="VS2P4Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PkgCmdID.cs" />
-    <Compile Include="VsSelection.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DlgQueryEditCheckedInFile.resx">
-      <DependentUpon>DlgQueryEditCheckedInFile.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DlgLogin.resx">
-      <DependentUpon>DlgLogin.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DlgQuerySaveCheckedInFile.resx">
-      <DependentUpon>DlgQuerySaveCheckedInFile.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SccProviderCommandOptionsControl.resx">
-      <DependentUpon>SccProviderCommandOptionsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SccProviderConnectionOptions.resx">
-      <DependentUpon>SccProviderConnectionOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SccProviderConnectionOptionsControl.resx">
-      <DependentUpon>SccProviderConnectionOptionsControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VSPackage.resx">
-      <MergeWithCTO>true</MergeWithCTO>
-      <ManifestResourceName>VSPackage</ManifestResourceName>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -204,7 +106,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Key.snk" />
-    <Resource Include="Resources\SccGlyphs4.bmp" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -212,15 +113,6 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <VSCTCompile Include="VS2P4.vsct">
-      <ResourceName>Menus.ctmenu</ResourceName>
-      <SubType>Designer</SubType>
-    </VSCTCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Images_32bit.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="VS11\ReadMe.txt" />
@@ -244,10 +136,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Resource Include="Resources\Package.ico">
-      <VSIXSubPath>./</VSIXSubPath>
-    </Resource>
-    <Resource Include="Resources\Images_24bit.bmp" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Community.VisualStudio.Toolkit.17">
@@ -265,6 +153,7 @@
       <Version>2023.2.255.3501</Version>
     </PackageReference>
   </ItemGroup>
+  <Import Project="..\VS2P4.Source\VS2P4.Source.projitems" Label="Shared" />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

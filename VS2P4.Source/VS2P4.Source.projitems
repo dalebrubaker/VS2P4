@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>78e63f07-07ba-4812-8a17-9cc60e47b489</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>VS2P4.Source</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomSccGlyphs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStreamFromComStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DlgLogin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DlgLogin.designer.cs">
+      <DependentUpon>DlgLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)DlgQueryEditCheckedInFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DlgQueryEditCheckedInFile.designer.cs">
+      <DependentUpon>DlgQueryEditCheckedInFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)DlgQuerySaveCheckedInFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DlgQuerySaveCheckedInFile.designer.cs">
+      <DependentUpon>DlgQuerySaveCheckedInFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)FileState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Guids.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodesGlyphsRefresher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)P4Cache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)P4CacheEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)P4Options.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)P4OptionsDefaultsProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)P4Service.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PersistedP4OptionSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PkgCmdID.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProvideSavedSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProvideSolutionProps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProvideSourceControlProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProvideToolsOptionsPageOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProvideToolsOptionsPageVisibility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SccProviderCommandOptions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SccProviderCommandOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SccProviderCommandOptionsControl.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SccProviderConnectionOptions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SccProviderConnectionOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SccProviderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VS2P4Package.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VsSelection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)DlgLogin.resx">
+      <DependentUpon>DlgLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)DlgQueryEditCheckedInFile.resx">
+      <DependentUpon>DlgQueryEditCheckedInFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)DlgQuerySaveCheckedInFile.resx">
+      <DependentUpon>DlgQuerySaveCheckedInFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SccProviderCommandOptionsControl.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SccProviderConnectionOptions.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SccProviderConnectionOptionsControl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)VS2P4.vsct" />
+  </ItemGroup>
+</Project>

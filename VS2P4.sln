@@ -16,7 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "TDD\UnitTests.csproj", "{AD378F64-94D2-46EB-9279-82CF59EAEDD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VS2P4", "Main\VS2P4.csproj", "{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VS2P4.2022", "VS2P4.2022\VS2P4.2022.csproj", "{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "VS2P4.Source", "VS2P4.Source\VS2P4.Source.shproj", "{78E63F07-07BA-4812-8A17-9CC60E47B489}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +50,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A420D36F-7F9B-46CC-80A7-0C1BCF52951B}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		VS2P4.Source\VS2P4.Source.projitems*{78e63f07-07ba-4812-8a17-9cc60e47b489}*SharedItemsImports = 13
+		VS2P4.Source\VS2P4.Source.projitems*{f903374c-25fa-4ee4-be3a-e6c0d60684d3}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
