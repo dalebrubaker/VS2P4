@@ -27,6 +27,7 @@ namespace BruSoft.VS2P4
     /// </summary>
     /// 
     [Guid("B0BAC05D-111E-4a5b-9834-076CB319ED59")]
+    [ComVisible(true)]
     public class SccProviderConnectionOptions : MsVsShell.DialogPage
     {
         private SccProviderConnectionOptionsControl page;

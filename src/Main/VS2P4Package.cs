@@ -1,23 +1,22 @@
-﻿using System;
+﻿using Community.VisualStudio.Toolkit;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Threading.Tasks;
 using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
 using MsVsShell = Microsoft.VisualStudio.Shell;
 
 namespace BruSoft.VS2P4
 {
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
     /// It also is responsible for handling the enabling and execution of source control commands.
@@ -834,10 +833,10 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Refresh the source control glyphs for all files in the solution.
         /// </summary>
-        public void RefreshSolutionGlyphs()
+        public async Task RefreshSolutionGlyphs()
         {
             IList<VSITEMSELECTION> nodes = GetSolutionNodes();
-            RefreshNodesGlyphs(nodes);
+            await RefreshNodesGlyphs(nodes);
         }
 
         /// <summary>
@@ -863,7 +862,7 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Refreshes the glyphs of the specified hierarchy nodes
         /// </summary>
-        public void RefreshNodesGlyphs(IList<VSITEMSELECTION> selectedNodes)
+        public async Task RefreshNodesGlyphs(IList<VSITEMSELECTION> selectedNodes)
         {
             var map = new Dictionary<IVsSccProject2, GlyphsToUpdate>();
             var rootUpdates = new Dictionary<IVsHierarchy, List<VsStateIcon>>();
@@ -909,7 +908,10 @@ namespace BruSoft.VS2P4
 
                         BuildUpdateInfo(map, vsItemSel, sccProject2);
                         sw.Stop();
-                        Log.Information(string.Format("Glyphs updated for project {0} ({1}/{2}), took {3} msec", projectFileName, n++, selectedNodes.Count, sw.ElapsedMilliseconds));
+                        var message = String.Format("Glyphs updated for project {0} ({1}/{2})", projectFileName, n, selectedNodes.Count);
+                        Log.Information($"{message}, took {sw.ElapsedMilliseconds} msec");
+                        await VS.StatusBar.ShowProgressAsync(message, (int)n, selectedNodes.Count);
+                        n++;
                     }
                 }
                 else
@@ -917,6 +919,7 @@ namespace BruSoft.VS2P4
                     BuildUpdateInfo(map, vsItemSel, sccProject2);
                 }
             }
+            await VS.StatusBar.ShowProgressAsync(string.Empty, selectedNodes.Count, selectedNodes.Count);
             foreach (var project in map.Keys)
             {
                 var glyphs = map[project];

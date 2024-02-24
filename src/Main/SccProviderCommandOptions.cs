@@ -11,6 +11,7 @@ using MsVsShell = Microsoft.VisualStudio.Shell;
 namespace BruSoft.VS2P4
 {
     [Guid("A9528774-0ADB-46BB-8623-E4AB7A4EB7E8")]
+    [ComVisible(true)]
     public class SccProviderCommandOptions : MsVsShell.DialogPage
     {
         private SccProviderCommandOptionsControl page;

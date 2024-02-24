@@ -7,6 +7,8 @@ namespace BruSoft.VS2P4
     using System.Collections.Generic;
     using System.Threading;
     using System.Diagnostics;
+    using Community.VisualStudio.Toolkit;
+    using System.Windows.Forms;
 
     /// <summary>
     /// Maintains a cache of the Perforce FileStates of every file in the solution.
@@ -193,7 +195,7 @@ namespace BruSoft.VS2P4
                 // inside the lock, so that 2 threads can't do it at the same time.
                 Trace.WriteLineIf(_traceSwitch.TraceVerbose, "P4Cache.AddOrUpdateFilesBackground starting SetFileStates on background thread");
                 Log.Debug("P4Cache:AddOrUpdateFilesBackground: Starting SetFileStates() on background thread.");
-                _cacheUpdateTask = Task.Factory.StartNew(() =>
+                _cacheUpdateTask = Task.Factory.StartNew(() => 
                 {
                     // Execute the entire background thread with the lock engaged, to prevent another call to
                     // AddOrUpdateFilesBackground from attempting to start us again until we've completed.  It is
@@ -256,7 +258,7 @@ namespace BruSoft.VS2P4
         /// <param name="obj">the object holding the lists of file names and selected nodes.</param>
         /// <exception cref="System.ArgumentException">Thrown when null or empty P4Options.Port, or when P4Options.Client is invalid</exception>
         /// <exception cref="P4API.Exceptions.PerforceInitializationError">Thrown P4Options.Port is invalid</exception>
-        private void SetFileStates(object obj)
+        private async Task SetFileStates(object obj)
         {
             Trace.WriteLineIf(_traceSwitch.TraceVerbose, "P4Cache.SetFileStates(object) started");
             var vsSelection = obj as VsSelection;
@@ -273,7 +275,7 @@ namespace BruSoft.VS2P4
 
                 const int stepSize = 5000;
                 var sw = new Stopwatch();
-                for (int i = 0; i < vsSelection.FileNames.Count; i += stepSize)
+                for (int i = 0; i < fileCount; i += stepSize)
                 {
                     var chunk = vsSelection.GetSection(i, i + stepSize);
 
@@ -282,8 +284,11 @@ namespace BruSoft.VS2P4
                     sw.Restart();
                     SetFileStates(fileNames);
                     sw.Stop();
-                    Log.Information(string.Format("Finished setting file states on background thread for {0}/{1} files, took {2} msec", end, fileCount, sw.ElapsedMilliseconds));
+                    var message = string.Format("Finished setting file states on background thread for {0}/{1} files", end, fileCount);
+                    Log.Information($"{message}, took {sw.ElapsedMilliseconds} msec");
+                    await VS.StatusBar.ShowProgressAsync(message, end, fileCount);
                 }
+                await VS.StatusBar.ShowProgressAsync(string.Empty, fileCount, fileCount);
                 // When finished, throw an event that can tell the caller to tell VS to look for new glyphs for every file.
                 // But first reset the "is updating" flag so that the recipient can take advantage of the states already
                 // being in the cache.

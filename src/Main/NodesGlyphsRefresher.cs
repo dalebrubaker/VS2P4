@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace BruSoft.VS2P4
 {
-    using Microsoft.VisualStudio.Shell;
-    using Microsoft.VisualStudio.Shell.Interop;
-
     /// <summary>
     /// Refresh glyphs for nodes, on the VS UI thread
     /// </summary>
@@ -32,16 +31,16 @@ namespace BruSoft.VS2P4
             _isRunning = true;
             ThreadHelper.JoinableTaskFactory.Run(async delegate
             {
-                RefreshSelectedNodes();
+                await RefreshSelectedNodesAsync();
                 _isRunning = false;
             });
         }
 
-        private void RefreshSelectedNodes()
+        private async Task RefreshSelectedNodesAsync()
         {
             var sw = new Stopwatch();
             sw.Start();
-            _sccProvider.RefreshNodesGlyphs(_nodes);
+            await _sccProvider.RefreshNodesGlyphs(_nodes);
             sw.Stop();
             Log.Information(string.Format("{0} msec to refresh {1} nodes", sw.ElapsedMilliseconds, _nodes.Count));
         }
