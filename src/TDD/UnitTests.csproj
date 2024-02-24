@@ -293,7 +293,7 @@
     <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.15.8.122\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Main\VS2P4.csproj">
+    <ProjectReference Include="..\..\VS2P4.2022\VS2P4.2022.csproj">
       <Project>{f903374c-25fa-4ee4-be3a-e6c0d60684d3}</Project>
       <Name>VS2P4</Name>
     </ProjectReference>
