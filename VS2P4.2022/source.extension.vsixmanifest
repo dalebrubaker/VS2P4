@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="7A093A78-48FB-438E-8F20-B810005877DC" Version="2.2" Language="en-US" Publisher="Dale B"/>
+        <Identity Id="7A093A78-48FB-438E-8F20-B810005877DC" Version="2.2.0.1" Language="en-US" Publisher="Dale B"/>
         <DisplayName>VS2P4</DisplayName>
         <Description xml:space="preserve">Visual Studio To Perforce Source Control</Description>
         <MoreInfo>https://github.com/dalebrubaker/VS2P4</MoreInfo>
@@ -10,9 +10,6 @@
         <PreviewImage>SolutionExplorer.png</PreviewImage>
     </Metadata>
     <Installation InstalledByMsi="false">
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Pro">
-            <ProductArchitecture>x86</ProductArchitecture>
-        </InstallationTarget>
         <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
