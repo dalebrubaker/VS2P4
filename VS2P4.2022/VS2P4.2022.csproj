@@ -115,11 +115,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="VS11\ReadMe.txt" />
-    <Content Include="Package.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Condition=" '$(Platform)' == 'x86' " Include="..\packages\p4api.net.2023.1.245.6134\runtimes\win-x86\native\p4bridge.dll">
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>./</VSIXSubPath>
@@ -127,10 +122,6 @@
     <Content Condition=" '$(Platform)' == 'x64' " Include="..\packages\p4api.net.2023.1.245.6134\runtimes\win-x64\native\p4bridge.dll">
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>./</VSIXSubPath>
-    </Content>
-    <Content Include="SolutionExplorer.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

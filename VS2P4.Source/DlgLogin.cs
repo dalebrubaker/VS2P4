@@ -29,12 +29,12 @@ namespace BruSoft.VS2P4
             set { _password = value; }
         }
 
-        public DlgLogin(string server, string port)
+        public DlgLogin(string username, string server, string port)
         {
             InitializeComponent();
 
             textBoxPassword.Focus();
-            msgText.Text = String.Format(CultureInfo.CurrentUICulture, msgText.Text, server, port);
+            msgText.Text = String.Format(CultureInfo.CurrentUICulture, msgText.Text, username, server, port);
         }
 
         private void butCancel_Click(object sender, EventArgs e)

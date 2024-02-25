@@ -1,14 +1,16 @@
-﻿using System.Diagnostics;
+﻿#if VS2P4_VS2022
+using Community.VisualStudio.Toolkit;
+#endif
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BruSoft.VS2P4
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Diagnostics;
-    using Community.VisualStudio.Toolkit;
-    using System.Windows.Forms;
+
 
     /// <summary>
     /// Maintains a cache of the Perforce FileStates of every file in the solution.
@@ -286,9 +288,13 @@ namespace BruSoft.VS2P4
                     sw.Stop();
                     var message = string.Format("Finished setting file states on background thread for {0}/{1} files", end, fileCount);
                     Log.Information($"{message}, took {sw.ElapsedMilliseconds} msec");
+#if VS2P4_VS2022
                     await VS.StatusBar.ShowProgressAsync(message, end, fileCount);
+#endif
                 }
+#if VS2P4_VS2022
                 await VS.StatusBar.ShowProgressAsync(string.Empty, fileCount, fileCount);
+#endif
                 // When finished, throw an event that can tell the caller to tell VS to look for new glyphs for every file.
                 // But first reset the "is updating" flag so that the recipient can take advantage of the states already
                 // being in the cache.

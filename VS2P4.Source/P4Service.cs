@@ -116,7 +116,7 @@ namespace BruSoft.VS2P4
                 }
 
                 // If connection failed, ask for a login and try again.
-                var dlgLogin = new DlgLogin(Server, "");
+                var dlgLogin = new DlgLogin(_p4Repository.Connection.UserName, Server, "");
                 if (dlgLogin.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
                 {
                     Log.Error(String.Format(Resources.Unable_To_Connect, Server, ""));
@@ -136,7 +136,7 @@ namespace BruSoft.VS2P4
             Perforce.P4.P4CommandResult resultSet = null;
             if (SendCommand("property", out message, out resultSet, "-l") && resultSet.Success)
             {
-                var swarmInfo = resultSet.TaggedOutput.FirstOrDefault(s => s.ContainsKey("name") && s["name"] == "P4.Swarm.URL");
+                var swarmInfo = resultSet.TaggedOutput?.FirstOrDefault(s => s.ContainsKey("name") && s["name"] == "P4.Swarm.URL");
                 if (swarmInfo != null)
                 {
                     _swarmURL = swarmInfo["value"];

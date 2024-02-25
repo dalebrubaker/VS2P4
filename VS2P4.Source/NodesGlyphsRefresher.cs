@@ -36,7 +36,7 @@ namespace BruSoft.VS2P4
             });
         }
 
-        private async Task RefreshSelectedNodesAsync()
+        private async System.Threading.Tasks.Task RefreshSelectedNodesAsync()
         {
             var sw = new Stopwatch();
             sw.Start();

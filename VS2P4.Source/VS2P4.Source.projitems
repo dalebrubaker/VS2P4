@@ -83,4 +83,10 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)VS2P4.vsct" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Images_24bit.bmp" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Images_32bit.bmp" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Package.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\SccGlyphs4.bmp" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,6 @@
-﻿using Community.VisualStudio.Toolkit;
+﻿#if VS2P4_VS2022
+using Community.VisualStudio.Toolkit;
+#endif
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
@@ -833,7 +835,7 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Refresh the source control glyphs for all files in the solution.
         /// </summary>
-        public async Task RefreshSolutionGlyphs()
+        public async System.Threading.Tasks.Task RefreshSolutionGlyphs()
         {
             IList<VSITEMSELECTION> nodes = GetSolutionNodes();
             await RefreshNodesGlyphs(nodes);
@@ -862,7 +864,7 @@ namespace BruSoft.VS2P4
         /// <summary>
         /// Refreshes the glyphs of the specified hierarchy nodes
         /// </summary>
-        public async Task RefreshNodesGlyphs(IList<VSITEMSELECTION> selectedNodes)
+        public async System.Threading.Tasks.Task RefreshNodesGlyphs(IList<VSITEMSELECTION> selectedNodes)
         {
             var map = new Dictionary<IVsSccProject2, GlyphsToUpdate>();
             var rootUpdates = new Dictionary<IVsHierarchy, List<VsStateIcon>>();
@@ -910,7 +912,9 @@ namespace BruSoft.VS2P4
                         sw.Stop();
                         var message = String.Format("Glyphs updated for project {0} ({1}/{2})", projectFileName, n, selectedNodes.Count);
                         Log.Information($"{message}, took {sw.ElapsedMilliseconds} msec");
+#if VS2P4_VS2022
                         await VS.StatusBar.ShowProgressAsync(message, (int)n, selectedNodes.Count);
+#endif
                         n++;
                     }
                 }
@@ -919,7 +923,9 @@ namespace BruSoft.VS2P4
                     BuildUpdateInfo(map, vsItemSel, sccProject2);
                 }
             }
+#if VS2P4_VS2022
             await VS.StatusBar.ShowProgressAsync(string.Empty, selectedNodes.Count, selectedNodes.Count);
+#endif
             foreach (var project in map.Keys)
             {
                 var glyphs = map[project];
@@ -1358,6 +1364,6 @@ namespace BruSoft.VS2P4
             return mapHierarchies;
         }
 
-        #endregion
+#endregion
     }
 }

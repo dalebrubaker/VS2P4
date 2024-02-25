@@ -52,7 +52,7 @@ namespace BruSoft.VS2P4
 			this.msgText.Name = "msgText";
 			this.msgText.Size = new System.Drawing.Size(219, 31);
 			this.msgText.TabIndex = 1;
-			this.msgText.Text = "Enter the password to log in ({0}:{1}):";
+			this.msgText.Text = "Enter the password to log in ({0}@{1}:{2}):";
 			this.msgText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// textBoxPassword

@@ -295,7 +295,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\VS2P4.2022\VS2P4.2022.csproj">
       <Project>{f903374c-25fa-4ee4-be3a-e6c0d60684d3}</Project>
-      <Name>VS2P4</Name>
+      <Name>VS2P4.2022</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" Condition="'$(_NTDRIVE)' == ''" />

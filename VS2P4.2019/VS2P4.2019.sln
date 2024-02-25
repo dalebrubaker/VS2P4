@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E821C57F-D386-4F7C-8298-F9EB34E561AE}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies.txt = Dependencies.txt
+		EULA.txt = EULA.txt
+		License.txt = License.txt
+		Package.png = Package.png
+		..\README.md = ..\README.md
+		ReadMe.txt = ReadMe.txt
+		VS2P4\solution explorer.png = VS2P4\solution explorer.png
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "..\src\TDD\UnitTests.csproj", "{AD378F64-94D2-46EB-9279-82CF59EAEDD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VS2P4.2019", "VS2P4.2019.csproj", "{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "VS2P4.Source", "..\VS2P4.Source\VS2P4.Source.shproj", "{78E63F07-07BA-4812-8A17-9CC60E47B489}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\VS2P4.Source\VS2P4.Source.projitems*{78e63f07-07ba-4812-8a17-9cc60e47b489}*SharedItemsImports = 13
+		..\VS2P4.Source\VS2P4.Source.projitems*{f903374c-25fa-4ee4-be3a-e6c0d60684d3}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Debug|x64.ActiveCfg = Debug|x64
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Debug|x64.Build.0 = Debug|x64
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Debug|x86.ActiveCfg = Debug|x86
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Debug|x86.Build.0 = Debug|x86
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Release|x64.ActiveCfg = Release|x64
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Release|x64.Build.0 = Release|x64
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Release|x86.ActiveCfg = Release|x86
+		{AD378F64-94D2-46EB-9279-82CF59EAEDD8}.Release|x86.Build.0 = Release|x86
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Debug|x64.ActiveCfg = Debug|x64
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Debug|x64.Build.0 = Debug|x64
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Debug|x86.ActiveCfg = Debug|x86
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Debug|x86.Build.0 = Debug|x86
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Release|x64.ActiveCfg = Release|x64
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Release|x64.Build.0 = Release|x64
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Release|x86.ActiveCfg = Release|x86
+		{F903374C-25FA-4EE4-BE3A-E6C0D60684D3}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A420D36F-7F9B-46CC-80A7-0C1BCF52951B}
+	EndGlobalSection
+EndGlobal
