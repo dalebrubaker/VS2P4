@@ -13,7 +13,8 @@
     <RootNamespace>BruSoft.VS2P4</RootNamespace>
     <AssemblyName>VS2P4</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -139,11 +140,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\VS2P4.Files\Key.snk">
+      <Link>Key.snk</Link>
+    </None>
     <None Include="App.config" />
     <None Include="DefaultUserSettings.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Key.snk" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -154,7 +157,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Package.png">
+    <Compile Include="..\VS2P4.Files\VS2P4.cs">
+      <Link>VS2P4.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VS2P4.vsct</DependentUpon>
+    </Compile>
+    <VSCTCompile Include="..\VS2P4.Files\VS2P4.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+      <Generator>VsctGenerator</Generator>
+      <LastGenOutput>VS2P4.cs</LastGenOutput>
+    </VSCTCompile>
+    <Resource Include="..\VS2P4.Files\Package.png">
+      <Link>Package.png</Link>
+    </Resource>
+    <Resource Include="..\VS2P4.Files\SolutionExplorer.png">
+      <Link>SolutionExplorer.png</Link>
+    </Resource>
+    <Content Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -165,14 +186,6 @@
     <Content Condition=" '$(Platform)' == 'x64' " Include="packages\p4api.net.2020.2.207.9205\runtimes\win-x64\native\p4bridge.dll">
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>./</VSIXSubPath>
-    </Content>
-    <Content Include="SolutionExplorer.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="License.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
   <ItemGroup>
