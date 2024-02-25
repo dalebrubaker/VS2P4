@@ -136,12 +136,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Resource Include="..\VS2P4.Files\Package.png">
+    <Content Include="..\VS2P4.Files\Package.png">
       <Link>Package.png</Link>
-    </Resource>
-    <Resource Include="..\VS2P4.Files\SolutionExplorer.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\VS2P4.Files\SolutionExplorer.png">
       <Link>SolutionExplorer.png</Link>
-    </Resource>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Compile Include="..\VS2P4.Files\VS2P4.cs">
       <Link>VS2P4.cs</Link>
       <AutoGen>True</AutoGen>

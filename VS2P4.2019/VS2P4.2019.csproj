@@ -169,12 +169,14 @@
       <Generator>VsctGenerator</Generator>
       <LastGenOutput>VS2P4.cs</LastGenOutput>
     </VSCTCompile>
-    <Resource Include="..\VS2P4.Files\Package.png">
+    <Content Include="..\VS2P4.Files\Package.png">
       <Link>Package.png</Link>
-    </Resource>
-    <Resource Include="..\VS2P4.Files\SolutionExplorer.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\VS2P4.Files\SolutionExplorer.png">
       <Link>SolutionExplorer.png</Link>
-    </Resource>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="License.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
