@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace BruSoft.VS2P4
 {
@@ -12,7 +10,7 @@ namespace BruSoft.VS2P4
     public class NodesGlyphsRefresher
     {
         private readonly IList<VSITEMSELECTION> _nodes;
-
+        
         private readonly VS2P4Package _sccProvider;
         private bool _isRunning = false;
 
@@ -29,7 +27,7 @@ namespace BruSoft.VS2P4
                 return;
             }
             _isRunning = true;
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async delegate
             {
                 await RefreshSelectedNodesAsync();
                 _isRunning = false;
