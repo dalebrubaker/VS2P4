@@ -293,7 +293,10 @@ namespace BruSoft.VS2P4
 #endif
                 }
 #if VS2P4_VS2022
-                await VS.StatusBar.ShowProgressAsync(string.Empty, fileCount, fileCount);
+                if (fileCount > 0)
+                {
+                    await VS.StatusBar.ShowProgressAsync(string.Empty, fileCount, fileCount);
+                }
 #endif
                 // When finished, throw an event that can tell the caller to tell VS to look for new glyphs for every file.
                 // But first reset the "is updating" flag so that the recipient can take advantage of the states already

@@ -924,7 +924,10 @@ namespace BruSoft.VS2P4
                 }
             }
 #if VS2P4_VS2022
-            await VS.StatusBar.ShowProgressAsync(string.Empty, selectedNodes.Count, selectedNodes.Count);
+            if (selectedNodes.Count > 0)
+            {
+                await VS.StatusBar.ShowProgressAsync(string.Empty, selectedNodes.Count, selectedNodes.Count);
+            }
 #endif
             foreach (var project in map.Keys)
             {
