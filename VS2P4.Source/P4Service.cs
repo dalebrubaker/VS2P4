@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Perforce.P4;
 
 namespace BruSoft.VS2P4
 {
@@ -130,7 +131,16 @@ namespace BruSoft.VS2P4
 
             var root = _p4Repository.Connection.Client.Root;
             _map.SetRoot(root);
-            _map.Stream = _p4Repository.Connection.Client.Stream;
+
+            _map.StreamRoot = _p4Repository.Connection.Client.Stream;
+            var stream = _p4Repository.GetStream(_map.StreamRoot);
+            if (stream != null)
+            {
+                if (stream.Type == StreamType.Virtual)
+                {
+                    _map.StreamRoot = stream.BaseParent.Path;
+                }
+            }
 
             string message = string.Empty;
             Perforce.P4.P4CommandResult resultSet = null;

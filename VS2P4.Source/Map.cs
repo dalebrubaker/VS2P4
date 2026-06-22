@@ -41,7 +41,7 @@ namespace BruSoft.VS2P4
         private string _root;
 
         private string _rootDir;
-        private string _stream;
+        private string _streamRoot;
 
 
         /// <summary>
@@ -54,10 +54,10 @@ namespace BruSoft.VS2P4
             get { return _root; }
         }
 
-        public string Stream
+        public string StreamRoot
         {
-            get { return _stream; }
-            set { _stream = value; }
+            get { return _streamRoot; }
+            set { _streamRoot = value; }
         }
 
         public void SetRoot(string root)
@@ -138,7 +138,7 @@ namespace BruSoft.VS2P4
                 p4FileName = p4FileName.Replace(_rootDir, "");
                 p4FileName = p4FileName.Replace('\\', '/');
                 // TODO: should call P4Service.EscapeFilename here probably
-                p4FileName = Stream + p4FileName;
+                p4FileName = StreamRoot + p4FileName;
                 _p4FileNames.TryAdd(vsFileName, p4FileName);
 
                 _isFileNameUnderRoot.TryAdd(vsFileName, true);
